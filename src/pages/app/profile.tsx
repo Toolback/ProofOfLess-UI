@@ -1,9 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
-import { useState } from 'react';
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
@@ -25,7 +24,6 @@ export const getStaticProps: GetStaticProps = async () => {
   let instance = await IPLDiamond();
   let reqQuestData = await instance.getQuestData(1);
   let reqTotalUser = await instance.totalSupply();
-  console.log("REQ HERE ?? ", reqQuestData, reqTotalUser)
 
   return {
     props: {
@@ -41,6 +39,23 @@ const AuthorProfilePage: NextPageWithLayout<
   let [copyButtonStatus, setCopyButtonStatus] = useState(false);
   let [_, copyToClipboard] = useCopyToClipboard();
   const { address, userDonutId} = useContext(WalletContext);
+  const [ userData, setUserData] = useState(null)
+
+  useEffect(() => {
+    // declare the data fetching function
+    const fetchData = async () => {
+      const instance = await IPLDiamond()
+      const data = await instance.getDonutInfos(userDonutId);
+      console.log("Donut data here ??", data)
+      setUserData(data);
+    }
+    console.log("Test donut ID ??", userDonutId)
+    if(userDonutId > 0) {
+      fetchData()
+        .catch(console.error);
+      
+    }
+  }, [userDonutId])
 
   const handleCopyToClipboard = () => {
     copyToClipboard(authorData.wallet_key);
@@ -81,7 +96,7 @@ const AuthorProfilePage: NextPageWithLayout<
             <div className="text-center ltr:md:text-left rtl:md:text-right">
               {/* Name */}
               <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
-                {authorData?.name}
+                {userData?.userName|| "N / A"}
               </h2>
 
               {/* Username */}
@@ -124,7 +139,7 @@ const AuthorProfilePage: NextPageWithLayout<
 
               <div>
                 <div className="mb-1.5 text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
-                  {authorData?.followers}
+                {userData != null ? (Number(userData.questCompleted)):('/')}
                 </div>
                 <div className="text-sm tracking-tighter text-gray-600 dark:text-gray-400">
                   Quests Completed

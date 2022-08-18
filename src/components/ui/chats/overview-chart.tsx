@@ -51,7 +51,7 @@ export default function OverviewChart({ chartWrapperClass, totalUsers }: Props) 
         {totalUsers} / 158
       </h3>
       <p className="mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm">
-        Actual Users
+        @ProofOfLess Members
       </p>
       <div className={cn('h-60 w-full', chartWrapperClass)}>
         <ResponsiveContainer width="100%" height="100%">

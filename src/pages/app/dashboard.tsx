@@ -22,6 +22,7 @@ import MainQuests_Table from '@/components/quests/mainquests-table';
 import MintDonutButton from '@/components/ui/mint-donut-button';
 import IPLDiamond from '@/lib/PLDiamond';
 import QuestDetailsButton from '@/components/ui/go-quest-details';
+import TopQuests from '@/components/ui/top-quests';
 
 export const getStaticProps: GetStaticProps = async () => {
   let instance = await IPLDiamond();
@@ -119,7 +120,7 @@ const DashBoard: NextPageWithLayout<
         </div>
         <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mt-0 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
           <OverviewChart totalUsers={props.totalUsers}/>
-          <TopPools />
+          <TopQuests twitterQuestUsers={props.activeQuestData[0].participants} />
         </div>
       </div>
     </>
