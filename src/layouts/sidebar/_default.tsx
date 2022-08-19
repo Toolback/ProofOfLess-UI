@@ -33,11 +33,11 @@ export const menuItems = [
     icon: <HomeIcon />,
     href: routes.dashboard,
   },
-  {
-    name: 'Content',
-    icon: <PoolIcon />,
-    href: routes.dashboard,
-  },
+  // {
+  //   name: 'Content',
+  //   icon: <PoolIcon />,
+  //   href: routes.dashboard,
+  // },
   {
     name: 'Profile',
     icon: <ProfileIcon />,
