@@ -36,7 +36,7 @@ export const menuItems = [
   {
     name: 'Content',
     icon: <PoolIcon />,
-    href: routes.search,
+    href: routes.dashboard,
   },
   {
     name: 'Profile',
