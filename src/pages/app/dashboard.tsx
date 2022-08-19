@@ -62,7 +62,7 @@ const DashBoard: NextPageWithLayout<
   const { balance, userDonutId } = useContext(WalletContext);
   const [isLoading, setLoading] = useState(false)
   const mintMessage: string = `This ID (Identity Donut) is unique. And might be yours ! `;
-  const renderTwitterParticipants:string = props.activeQuestData[0]? ("12") : "110" 
+  const renderTwitterParticipants:string = props.activeQuestData[0]? (props.activeQuestData[0].participants.toString()) : "110" 
   
   console.log('RETURN QUESTDATA DASHBOARD',props);
 

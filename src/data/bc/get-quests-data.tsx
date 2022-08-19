@@ -13,10 +13,10 @@ export async function retrieveAllListedQuests() {
       const questName = reqQuest.questName;
       const questId = Number(reqQuest.questId);
       const questType = "Social Media";
-      // const startPeriod = new Date(Number(reqQuest.startPeriod) * 1000).toLocaleDateString("fr-EU")
-      // const endPeriod = new Date(Number(reqQuest.endPeriod) * 1000).toLocaleDateString("fr-EU")
-      const startPeriod = (Number(reqQuest.startPeriod)).toString()
-      const endPeriod = (Number(reqQuest.endPeriod)).toString()
+      const startPeriod = new Date(Number(reqQuest.startPeriod) * 1000).toLocaleDateString("fr-EU")
+      const endPeriod = new Date(Number(reqQuest.endPeriod) * 1000).toLocaleDateString("fr-EU")
+      // const startPeriod = (Number(reqQuest.startPeriod)).toString()
+      // const endPeriod = (Number(reqQuest.endPeriod)).toString()
 
       const stableReward = Number(reqQuest.questBalance)
       const lessReward = Number(reqQuest.lessReward)
