@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
@@ -23,47 +23,48 @@ import MintDonutButton from '@/components/ui/mint-donut-button';
 import IPLDiamond from '@/lib/PLDiamond';
 import QuestDetailsButton from '@/components/ui/go-quest-details';
 import TopQuests from '@/components/ui/top-quests';
+import { useQuery } from 'react-query';
+import { retrieveAllListedQuests } from '@/data/bc/get-quests-data';
 
 export const getStaticProps: GetStaticProps = async () => {
-  let instance = await IPLDiamond();
-  let activeQuests = await instance.getAllActiveQuests();
+  const data = await retrieveAllListedQuests()
+  console.log("Listed Quest data here ??", data)
+  let activeQuestData = data.activeQuestData
+  let totalUsers = data.totalUsers
 
-  let allQuestsData:any = []
-  await activeQuests.map(async (questId:any) => {
-    let reqQuest = await instance.getQuestData(Number(questId))
-    let startPeriod = new Date(Number(reqQuest.startPeriod) * 1000).toLocaleDateString("fr-EU")
-    let endPeriod = new Date(Number(reqQuest.endPeriod) * 1000).toLocaleDateString("fr-EU")
-    let stableReward = Number(reqQuest.questBalance)
-    let lessReward = Number(reqQuest.lessReward)
-
-    let unitQuest = {
-        questName: reqQuest.questName,
-        questId: Number(reqQuest.questId),
-        questType: "Social Media",           // TO CHANGE   
-        questDuration: {startPeriod, endPeriod},
-        questReward: {stableReward, lessReward},
-        participants: reqQuest.participants.length,
-        actionCall : Number(reqQuest.questId)
-    }
-    
-    await allQuestsData.push(unitQuest)    
-  })
-  let req2 = await instance.totalSupply();
   return {
     props: {
-      activeQuestData: allQuestsData,
-      totalUsers: Number(req2)
+      activeQuestData,
+      totalUsers
     },
     revalidate: 10, // In seconds
 
   };
 };
+// export interface  ActiveQuestData {
+//   questName: string,
+//   questId: number,
+//   questType: string, // TO CHANGE
+//   questDuration: { startPeriod: string, endPeriod: string },
+//   questReward: { stableReward:number, lessReward:number },
+//   participants: number,
+//   actionCall: number,
+// }
+// export interface QuestsTypeData {
+//     activeQuestData?: ActiveQuestData[],
+//     totalUsers?: number
+//   }
 
 const DashBoard: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = (props) => {
+
   const { balance, userDonutId } = useContext(WalletContext);
-  let mintMessage: string = `This ID (Identity Donut) is unique. And might be yours ! `;
+  const [isLoading, setLoading] = useState(false)
+  const mintMessage: string = `This ID (Identity Donut) is unique. And might be yours ! `;
+  const renderTwitterParticipants:string = props.activeQuestData[0]? ("12") : "110" 
+  
+  console.log('RETURN QUESTDATA DASHBOARD',props);
 
   return (
     <>
@@ -116,11 +117,16 @@ const DashBoard: NextPageWithLayout<
 
       <div className="mt-8 flex flex-wrap">
         <div className="w-full lg:w-[calc(100%-288px)] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[calc(100%-320px)] 3xl:w-[calc(100%-358px)]">
-          <MainQuests_Table activeQuestData={props.activeQuestData}/>
-        </div>
+          {/* {!isLoading && */}
+                  <MainQuests_Table activeQuestData={props.activeQuestData} />
+
+          {/* } */}
+          </div>
         <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mt-0 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
-          <OverviewChart totalUsers={props.totalUsers}/>
-          <TopQuests twitterQuestUsers={props.activeQuestData[0]?.participants} />
+          <OverviewChart totalUsers={props.totalUsers} />
+          <TopQuests
+            twitterQuestUsers={renderTwitterParticipants}
+          />
         </div>
       </div>
     </>

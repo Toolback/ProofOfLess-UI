@@ -12,10 +12,6 @@ import Scrollbar from '@/components/ui/scrollbar';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowLeft } from '@/components/icons/long-arrow-left';
-import { LinkIcon } from '@/components/icons/link-icon';
-import { mainQuests_data } from '@/data/static/mainQuests_data';
-import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import QuestDetailsButton from '../ui/go-quest-details';
 
 const COLUMNS = [
@@ -136,8 +132,8 @@ type ActiveQuestData = {
   questName: string,
   questId: number,
   questType:string,   
-  questReward:{},
   questDuration: {},
+  questReward:{},
   participants: number,
   actionCall: any,
 }
@@ -149,7 +145,6 @@ export default function MainQuests_Table({
 }) {
   const data = React.useMemo(() => activeQuestData, []);
   const columns = React.useMemo(() => COLUMNS, []);
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -173,9 +168,9 @@ export default function MainQuests_Table({
     useResizeColumns,
     useFlexLayout,
     usePagination
-  );
-
-  const { pageIndex } = state;
+    );
+    
+    const { pageIndex } = state;
 
   return (
     <div className="">
@@ -237,6 +232,7 @@ export default function MainQuests_Table({
               >
                 {page.map((row, idx) => {
                   prepareRow(row);
+
                   return (
                     <tr
                       {...row.getRowProps()}
