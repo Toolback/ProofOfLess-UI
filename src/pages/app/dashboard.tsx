@@ -120,7 +120,7 @@ const DashBoard: NextPageWithLayout<
         </div>
         <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mt-0 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
           <OverviewChart totalUsers={props.totalUsers}/>
-          <TopQuests twitterQuestUsers={props.activeQuestData[0].participants} />
+          <TopQuests twitterQuestUsers={props.activeQuestData[0]?.participants} />
         </div>
       </div>
     </>
