@@ -58,7 +58,7 @@ export default function AuthorInformation({
       {/* Join date */}
       <div className="border-y border-dashed border-gray-200 py-5 dark:border-gray-700 xl:py-6">
         <div className="text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-          Joined {data?.created_at}
+          Donut Minted : {data?.created_at}
         </div>
       </div>
       {/* Report button */}
