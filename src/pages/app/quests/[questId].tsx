@@ -12,6 +12,7 @@ import QuestDetailsFrame from '@/components/ui/questDetailsFrame';
 import IPLDiamond from '@/lib/PLDiamond';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { WalletContext } from '@/lib/hooks/use-connect';
+import { ethers, providers } from 'ethers';
 
 export const getStaticPaths: GetStaticPaths = async() => {
   let instance = await IPLDiamond();
@@ -93,12 +94,16 @@ InferGetStaticPropsType<typeof getStaticProps>
     return res  }
 
   const handleSubscribe = async () => {
-    const instance = await IPLDiamond();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner(address)
+    const instance = await IPLDiamond(signer);
     await instance.subscribeToWaitingList(q.questId)
   }
 
   const handleUnsubscribe = async () => {
-    const instance = await IPLDiamond();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner(address)
+    const instance = await IPLDiamond(signer);
     await instance.unsubscribeFromWaitingList(q.questId, address)
   }
 
