@@ -126,48 +126,36 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             </div>
 
-            {/* Followers, Following and follow button */}
+            {/* Level & rank / exp - staking */}
             <div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 md:justify-start ltr:md:text-left rtl:md:text-right xl:mt-12 xl:gap-8 xl:py-6">
               <div>
-                <div className="mb-1.5 text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
-                  {authorData?.following}
+                <div className="mb-1.5 text-sm tracking-tighter text-gray-600 dark:text-gray-400">
+                  Joined Quest(s)
                 </div>
-                <div className="text-sm tracking-tighter text-gray-600 dark:text-gray-400">
-                  Actual Quest
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-1.5 text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
+                <div className="text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
                 {userData != null ? (Number(userData.questCompleted)):('/')}
                 </div>
-                <div className="text-sm tracking-tighter text-gray-600 dark:text-gray-400">
-                  Quests Completed
-                </div>
               </div>
 
               <Button
                 color="white"
                 className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
               >
-                Join
-              </Button>
-              <Button
-                color="white"
-                className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
-              >
-                Create
+                More
               </Button>
             </div>
 
             {/* Followed by */}
-            <div className="border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 ltr:md:text-left rtl:md:text-right xl:py-6">
+            
+            {/* <div className="border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 ltr:md:text-left rtl:md:text-right xl:py-6">
               <div className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
                 Friends List
               </div>
-              <div className="flex justify-center md:justify-start">
+              <div className="flex justify-center md:justify-start"> */}
+
                 {/* Followers list */}
-                {authorData?.followed_by?.map((item) => (
+
+                {/* {authorData?.followed_by?.map((item) => (
                   <AnchorLink
                     key={item?.id}
                     href="/"
@@ -194,7 +182,7 @@ const AuthorProfilePage: NextPageWithLayout<
                 </AnchorLink>
               </div>
             </div>
-
+ */}
             <AuthorInformation className="hidden md:block" data={authorData} />
           </div>
 

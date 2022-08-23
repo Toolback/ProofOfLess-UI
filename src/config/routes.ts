@@ -14,8 +14,8 @@ const routes = {
   createProposal: '/app/proposals/create',
   charts: '/charts',
   profile: '/app/profile',
-  portfolio: '/app/profile?view=portfolio',
-  history: '/app/profile?view=history',
+  statistics: '/app/profile?view=statistics',
+  quests: '/app/profile?view=quests',
 };
 
 export default routes;

@@ -33,7 +33,7 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
         className
       )}
     >
-      <div className="relative flex aspect-[8/11] w-full justify-center overflow-hidden rounded-lg">
+      <div className="relative flex aspect-[4/4] w-full justify-center overflow-hidden rounded-lg">
         <Image
           src={cover_image}
           placeholder="blur"
