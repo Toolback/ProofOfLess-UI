@@ -10,7 +10,7 @@ import cProvider from "./cProvider";
 const IPLDiamond = async (signer?:any) => {
     let customP = signer || cProvider
     let contractInstance = new ethers.Contract(
-        "0x981AE30Ae369b4F8acee7FBCF5B097F1E7c74C6D", 
+        "0xb483aE4D4dE9F0E341d13Ff0A9B3530E84265352", 
         ProofOfLessAbi, 
         customP
     );

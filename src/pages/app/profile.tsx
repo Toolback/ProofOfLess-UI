@@ -18,8 +18,15 @@ import { authorData } from '@/data/static/author';
 import DonutImage from '@/assets/images/donutwhite2.png';
 import POLHandPlant from '@/assets/images/POLHandPlant.jpg';
 import { WalletContext } from '@/lib/hooks/use-connect';
-import IPLDiamond from '@/lib/PLDiamond';
 
+import Web3Modal from 'web3modal';
+import { ethers } from 'ethers';
+import IPLDiamond from '@/lib/PLDiamond';
+import { Plus } from '@/components/icons/plus';
+import Input from '@/components/ui/forms/input';
+import { useToggle } from 'react-use';
+import ActiveLink from '@/components/ui/links/active-link';
+import routes from '@/config/routes';
 export const getStaticProps: GetStaticProps = async () => {
   let instance = await IPLDiamond();
   let reqQuestData = await instance.getQuestData(1);
@@ -38,24 +45,38 @@ const AuthorProfilePage: NextPageWithLayout<
 > = (props) => {
   let [copyButtonStatus, setCopyButtonStatus] = useState(false);
   let [_, copyToClipboard] = useCopyToClipboard();
-  const { address, userDonutId} = useContext(WalletContext);
-  const [ userData, setUserData] = useState(null)
+  const { address, userDonutId } = useContext(WalletContext);
+  const [numberQuestJoined, setNumberQuestJoined] = useState(0);
+  const [changeNameActive, setChangeNameActive] = useToggle(false);
 
+  const [newUserName, setNewUserName] = useState('New Username');
+  const defaultUserData = {
+    tokenId: 0,
+    userName: 'N/A',
+    userBio: 'N/A',
+  };
+  const [userData, setUserData] = useState(defaultUserData);
+
+  const web3Modal =
+    typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
   useEffect(() => {
     // declare the data fetching function
     const fetchData = async () => {
-      const instance = await IPLDiamond()
+      const instance = await IPLDiamond();
       const data = await instance.getDonutInfos(userDonutId);
-      console.log("Donut data here ??", data)
+      const isInTwitterQuest = await instance.isUserInWaitingList(1, address);
+      if (isInTwitterQuest) {
+        setNumberQuestJoined(+1);
+      }
+      console.log('RESULT QUESTS', isInTwitterQuest);
+      console.log('Donut data here ??', data);
       setUserData(data);
+    };
+    console.log('Test donut ID ??', userDonutId);
+    if (userDonutId > 0) {
+      fetchData().catch(console.error);
     }
-    console.log("Test donut ID ??", userDonutId)
-    if(userDonutId > 0) {
-      fetchData()
-        .catch(console.error);
-      
-    }
-  }, [userDonutId])
+  }, [userDonutId]);
 
   const handleCopyToClipboard = () => {
     copyToClipboard(authorData.wallet_key);
@@ -63,6 +84,16 @@ const AuthorProfilePage: NextPageWithLayout<
     setTimeout(() => {
       setCopyButtonStatus(copyButtonStatus);
     }, 2500);
+  };
+
+  const handleChangeUserName = async () => {
+    console.log('TEST CHANGE USERNAME INPUTS', userDonutId, newUserName);
+    const connection = web3Modal && (await web3Modal.connect());
+    const provider = new ethers.providers.Web3Provider(connection);
+    let signer = await provider.getSigner();
+    let instance = await IPLDiamond(signer);
+    await instance.setDonutName(userDonutId, newUserName);
+    setChangeNameActive();
   };
   return (
     <>
@@ -95,22 +126,58 @@ const AuthorProfilePage: NextPageWithLayout<
           <div className="shrink-0 border-dashed border-gray-200 dark:border-gray-700 md:w-72 ltr:md:border-r md:ltr:pr-7 rtl:md:border-l md:rtl:pl-7 lg:ltr:pr-10 lg:rtl:pl-10 xl:ltr:pr-14 xl:rtl:pl-14 2xl:w-80 3xl:w-96 3xl:ltr:pr-16 3xl:rtl:pl-16">
             <div className="text-center ltr:md:text-left rtl:md:text-right">
               {/* Name */}
-              <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
-                {userData?.userName|| "N / A"}
-              </h2>
+              {/* <div className='flex justify-between'> */}
+              {changeNameActive ? (
+                <div className="flex">
+                  <Input
+                    onChange={(e) => setNewUserName(e.target.value)}
+                    placeholder={newUserName}
+                  />
+                  <div className="ml-4 flex-col items-center justify-center">
+                    <Button
+                      onClick={() => handleChangeUserName()}
+                      color="white"
+                      className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
+                    >
+                      Send
+                    </Button>
+                    <Button
+                      onClick={() => setChangeNameActive()}
+                      color="white"
+                      className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center lg:justify-between">
+                  <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
+                    {userData.userName}
+                  </h2>
+                  <button
+                    onClick={() => setChangeNameActive()}
+                    className="right-0 flex h-5 w-5 shrink-0  items-center justify-center rounded-full bg-gray-900 text-white lg:h-6 lg:w-6"
+                  >
+                    <Plus className="h-auto w-2.5 lg:w-auto" />
+                  </button>
+                </div>
+              )}
+
+              {/* </div> */}
 
               {/* Username */}
               <div className="mt-1 text-sm font-medium tracking-tighter text-gray-600 dark:text-gray-400 xl:mt-3">
-                @{userDonutId > 0 ? ("Member"):('Visitor')}
+                @{userDonutId > 0 ? 'Member' : 'Visitor'}
               </div>
 
               {/* User ID and Address */}
               <div className="mt-5 inline-flex h-9 items-center rounded-full bg-white shadow-card dark:bg-light-dark xl:mt-6">
                 <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-                  #{userDonutId != undefined ? (userDonutId):('')}
+                  #{userDonutId != undefined ? userDonutId : ''}
                 </div>
                 <div className="text w-28 grow-0 truncate text-ellipsis bg-center text-xs text-gray-500 ltr:pl-4 rtl:pr-4 dark:text-gray-300 sm:w-32 sm:text-sm">
-                {address != undefined ? (address):('Not Connected')}
+                  {address != undefined ? address : 'Not Connected'}
                 </div>
                 <div
                   className="flex cursor-pointer items-center px-4 text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
@@ -133,29 +200,30 @@ const AuthorProfilePage: NextPageWithLayout<
                   Joined Quest(s)
                 </div>
                 <div className="text-lg font-medium tracking-tighter text-gray-900 dark:text-white">
-                {userData != null ? (Number(userData.questCompleted)):('/')}
+                  {numberQuestJoined}
                 </div>
               </div>
-
-              <Button
-                color="white"
-                className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
-              >
-                More
-              </Button>
+              {/* <ActiveLink href={routes.quests}>
+                <Button
+                  color="white"
+                  className="shadow-card dark:bg-light-dark md:h-10 md:px-5 xl:h-12 xl:px-7"
+                >
+                  More
+                </Button>
+              </ActiveLink> */}
             </div>
 
             {/* Followed by */}
-            
+
             {/* <div className="border-y border-dashed border-gray-200 py-5 text-center dark:border-gray-700 ltr:md:text-left rtl:md:text-right xl:py-6">
               <div className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
                 Friends List
               </div>
               <div className="flex justify-center md:justify-start"> */}
 
-                {/* Followers list */}
+            {/* Followers list */}
 
-                {/* {authorData?.followed_by?.map((item) => (
+            {/* {authorData?.followed_by?.map((item) => (
                   <AnchorLink
                     key={item?.id}
                     href="/"
@@ -183,13 +251,13 @@ const AuthorProfilePage: NextPageWithLayout<
               </div>
             </div>
  */}
-            <AuthorInformation className="hidden md:block" data={authorData} />
+            <AuthorInformation className="hidden md:block" data={userData} />
           </div>
 
           <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:ltr:pl-7 md:rtl:pr-7 lg:ltr:pl-10 lg:rtl:pr-10 xl:ltr:pl-14 xl:rtl:pr-14 3xl:ltr:pl-16 3xl:rtl:pr-16">
             <ProfileTab />
           </div>
-          <AuthorInformation data={authorData} />
+          <AuthorInformation data={userData} />
         </div>
       </div>
     </>
