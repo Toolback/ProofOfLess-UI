@@ -1,1 +1,1 @@
-Fake PUsdc deployed to: 0x7EfdfE55E15c978a8dc7F9dBf51c2997Ca8fA3f6
+Fake PUsdc deployed to: 0xb17ddD9426d3BCA925C48b24D9179B3B77162e51

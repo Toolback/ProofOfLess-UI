@@ -16,15 +16,29 @@ import Wallet from '@/assets/images/portfolio/wallet.svg';
 import Nft from '@/assets/images/portfolio/nft.svg';
 import Deposit from '@/assets/images/portfolio/deposit.svg';
 import Claimable from '@/assets/images/portfolio/claimable.svg';
+import { useContext, useEffect } from 'react';
+import PLUsdc from '@/lib/PLUsdc';
+import { WalletContext } from '@/lib/hooks/use-connect';
 
 interface DonutDetailsProps {
   data : any
 }
 export default function ProfileTab({data}: DonutDetailsProps) {
+  const { address, userDonutId } = useContext(WalletContext);
+
   console.log("data retrieved", data)
   let donutLevel = Number(data.level)
   
   let donutRank = Number(data.rank)
+  useEffect(() => {
+    const fetchData = async () => {
+      let PUsdc = await PLUsdc()
+      let req = await PUsdc.balanceOf(address)
+      console.log("test bal", req)
+    }
+    fetchData()
+    .then(e => console.log("res wallet data fetched ?", e))
+  }, [data || address])
   const authorWallets = [
     {
       id: 1,
@@ -106,7 +120,7 @@ export default function ProfileTab({data}: DonutDetailsProps) {
 
         <div className="space-y-8 md:space-y-10 xl:space-y-12">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">
-            {authorWallets?.map((wallet) => (
+            {authorWallets.map((wallet) => (
               <ListCard item={wallet} key={wallet?.id} variant="medium" />
             ))}
           </div>

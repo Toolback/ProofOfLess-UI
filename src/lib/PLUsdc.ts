@@ -7,12 +7,12 @@ import cProvider from "./cProvider";
 
 // Free Test USDC
 
-const PLUsdc = async (signer:any) => {
+const PLUsdc = async (signer?:any) => {
 
     let customP = signer || cProvider
 
     let contractInstance = new ethers.Contract(
-        "0x7EfdfE55E15c978a8dc7F9dBf51c2997Ca8fA3f6", 
+        "0xb17ddD9426d3BCA925C48b24D9179B3B77162e51", 
         erc20abi.abi, 
         customP
     );
