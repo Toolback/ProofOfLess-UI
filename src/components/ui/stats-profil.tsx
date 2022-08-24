@@ -68,9 +68,10 @@ function TabItem({
 
 type StatsDetailsProps = {
   statsType: string;
+  data: any
 };
 
-function StatsDetails({ statsType }: StatsDetailsProps) {
+function StatsDetails({ statsType, data }: StatsDetailsProps) {
   // let [amount, setAmount] = useState<any>(0);
   // const [firstCoin, setFirstCoin] = useState(coinList[0]);
   // const [secondCoin, setSecondCoin] = useState(coinList[1]);
@@ -113,17 +114,17 @@ function StatsDetails({ statsType }: StatsDetailsProps) {
         <div className="mt-4">
           <div className="flex justify-between">
             <span>Experience</span>
-            <span>10</span>
+            <span>{Number(data.experience)}</span>
           </div>
 
           <div className="flex justify-between">
             <span>To Next Level</span>
-            <span>100</span>
+            <span>{Number(data.toNextLevel)}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Less Staking</span>
-            <span>10</span>
+            <span>{Number(data.stakedAmount)}</span>
           </div>
 
           <div className="mb-4 flex justify-between">
@@ -145,34 +146,34 @@ function StatsDetails({ statsType }: StatsDetailsProps) {
         <div className="mt-4">
           <div className="flex justify-between">
             <span>Quest Accepted</span>
-            <span>0</span>
+            <span>{Number(data.questAccepted)}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Quest Completed</span>
-            <span>0</span>
+            <span>{Number(data.questCompleted)}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Proposal Voted</span>
-            <span>0</span>
+            <span>{Number(data.daoProposalVoted)}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Proposal Created</span>
-            <span>0</span>
+            <span>{Number(data.daoProposalCreated)}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Proposal Accepted</span>
-            <span>0</span>
+            <span>{Number(data.daoProposalCreatedAccepted)}</span>
           </div>
 
         </div>
       )}
       {statsType === 'Items' && (
         <div className="mt-4">
-        <span>No Item Equiped</span>
+        <span>Coming Soon !</span>
         </div>
       )}
     </>
@@ -181,7 +182,8 @@ function StatsDetails({ statsType }: StatsDetailsProps) {
 
 export default function StatsProfil({
   className,
-}: React.PropsWithChildren<{ className?: string }>) {
+  data
+}: React.PropsWithChildren<{ className?: string, data:any }>) {
   const isMounted = useIsMounted();
   const breakpoint = useBreakpoint();
   const dropdownEl = useRef<HTMLDivElement>(null);
@@ -240,13 +242,13 @@ export default function StatsProfil({
         <span className="my-6 block h-[1px] border-b border-dashed border-b-gray-200 dark:border-b-gray-700"></span>
         <TabPanels>
           <TabPanel className="relative w-full focus:outline-none md:w-auto">
-            <StatsDetails statsType="Ranking" />
+            <StatsDetails statsType="Ranking" data={data} />
           </TabPanel>
           <TabPanel className="focus:outline-none">
-            <StatsDetails statsType="Global" />
+            <StatsDetails statsType="Global" data={data} />
           </TabPanel>
           <TabPanel className="focus:outline-none">
-            <StatsDetails statsType="Items" />
+            <StatsDetails statsType="Items" data={data}/>
           </TabPanel>
           {/* <TabPanel className="focus:outline-none">
             <StatsDetails statsType="exchange" />

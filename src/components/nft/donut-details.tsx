@@ -10,7 +10,6 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 import Button from '@/components/ui/button';
 
 import { useModal } from '@/components/modal-views/context';
-import NftDropDown from './nft-dropdown';
 import Avatar from '@/components/ui/avatar';
 
 import { WalletContext } from '@/lib/hooks/use-connect';

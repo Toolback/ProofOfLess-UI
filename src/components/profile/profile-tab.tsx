@@ -5,20 +5,52 @@ import TransactionHistory from '@/components/author/quests-handler';
 import CollectionCard from '@/components/ui/collection-card';
 // static data
 import { collections } from '@/data/static/collections';
-import {
-  authorWallets,
-  authorNetworks,
-  authorProtocols,
-} from '@/data/static/author-profile';
+
 import donutImg from '@/assets/images/donutwhite2.png';
 import Avatar from '../ui/avatar';
-import WalletCard from '../ui/wallet-card';
-import TransactCoin from '../ui/transact-coin';
 import StatsProfil from '../ui/stats-profil';
 import Button from '../ui/button';
 import QuestsHandler from '@/components/author/quests-handler';
 
-export default function ProfileTab() {
+import Wallet from '@/assets/images/portfolio/wallet.svg';
+import Nft from '@/assets/images/portfolio/nft.svg';
+import Deposit from '@/assets/images/portfolio/deposit.svg';
+import Claimable from '@/assets/images/portfolio/claimable.svg';
+
+interface DonutDetailsProps {
+  data : any
+}
+export default function ProfileTab({data}: DonutDetailsProps) {
+  console.log("data retrieved", data)
+  let donutLevel = Number(data.level)
+  
+  let donutRank = Number(data.rank)
+  const authorWallets = [
+    {
+      id: 1,
+      name: 'WALLET',
+      logo: Wallet,
+      balance: '40 PUsdc',
+    },
+    {
+      id: 2,
+      name: 'LOCKED',
+      logo: Nft,
+      balance: '10 PUsdc',
+    },
+    {
+      id: 3,
+      name: 'REWARD',
+      logo: Claimable,
+      balance: '150 Less',
+    },
+    {
+      id: 4,
+      name: 'NEXT PAYMENT',
+      logo: Deposit,
+      balance: '-10 PUsdc',
+    },
+  ];
   return (
     <ParamTab
       tabMenu={[
@@ -52,7 +84,7 @@ export default function ProfileTab() {
                     Level
                   </h3>
                   <div className="mb-2 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
-                    1
+                    {donutLevel}
                   </div>
                 </div>
                 <div className="flex flex-col">
@@ -60,7 +92,7 @@ export default function ProfileTab() {
                     Rank
                   </h3>
                   <div className="mb-2 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
-                    1
+                    {donutRank}
                   </div>
                 </div>
               </div>
@@ -68,7 +100,7 @@ export default function ProfileTab() {
               {/* <TopupButton className="md:h-12 " /> */}
             </div>
             <span className="-mx-6 block border-t border-dashed border-t-gray-200 dark:border-t-gray-700 3xl:-mx-8" />
-            <StatsProfil className="mt-6" />
+            <StatsProfil className="mt-6" data={data} />
           </div>
         </div>
 

@@ -7,14 +7,12 @@ import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
 import Image from '@/components/ui/image';
-import AnchorLink from '@/components/ui/links/anchor-link';
 import { Copy } from '@/components/icons/copy';
 import { Check } from '@/components/icons/check';
 import AuthorInformation from '@/components/author/author-information';
 import ProfileTab from '@/components/profile/profile-tab';
 import Avatar from '@/components/ui/avatar';
 // static data
-import { authorData } from '@/data/static/author';
 import DonutImage from '@/assets/images/donutwhite2.png';
 import POLHandPlant from '@/assets/images/POLHandPlant.jpg';
 import { WalletContext } from '@/lib/hooks/use-connect';
@@ -25,8 +23,7 @@ import IPLDiamond from '@/lib/PLDiamond';
 import { Plus } from '@/components/icons/plus';
 import Input from '@/components/ui/forms/input';
 import { useToggle } from 'react-use';
-import ActiveLink from '@/components/ui/links/active-link';
-import routes from '@/config/routes';
+
 export const getStaticProps: GetStaticProps = async () => {
   let instance = await IPLDiamond();
   let reqQuestData = await instance.getQuestData(1);
@@ -68,18 +65,15 @@ const AuthorProfilePage: NextPageWithLayout<
       if (isInTwitterQuest) {
         setNumberQuestJoined(+1);
       }
-      console.log('RESULT QUESTS', isInTwitterQuest);
-      console.log('Donut data here ??', data);
       setUserData(data);
     };
-    console.log('Test donut ID ??', userDonutId);
     if (userDonutId > 0) {
       fetchData().catch(console.error);
     }
   }, [userDonutId]);
 
   const handleCopyToClipboard = () => {
-    copyToClipboard(authorData.wallet_key);
+    copyToClipboard(address);
     setCopyButtonStatus(true);
     setTimeout(() => {
       setCopyButtonStatus(copyButtonStatus);
@@ -255,7 +249,7 @@ const AuthorProfilePage: NextPageWithLayout<
           </div>
 
           <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:ltr:pl-7 md:rtl:pr-7 lg:ltr:pl-10 lg:rtl:pr-10 xl:ltr:pl-14 xl:rtl:pr-14 3xl:ltr:pl-16 3xl:rtl:pr-16">
-            <ProfileTab />
+            <ProfileTab data={userData}/>
           </div>
           <AuthorInformation data={userData} />
         </div>
