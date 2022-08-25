@@ -10,12 +10,14 @@ import Alert from '@/components/ui/alert';
 import CurrencySwapIcons from '@/components/ui/currency-swap-icons';
 
 const LiquidityPositionPage: NextPageWithLayout = () => {
-  let [isExpand, setIsExpand] = useState(false);
+  let [isAvailableExpand, setIsAvailableExpand] = useState(false);
+  let [isLockedExpand, setIsLockedExpand] = useState(false);
+  let [isEarningExpand, setIsEarningExpand] = useState(false);
   return (
     <>
       <NextSeo
         title="Liquidity Position"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Proof Of Less - Web3 Protocol for a more virtuouse lifestyle"
       />
       <div className="mx-auto w-full max-w-lg text-sm">
         <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white sm:mb-6 sm:text-2xl">
@@ -36,21 +38,21 @@ const LiquidityPositionPage: NextPageWithLayout = () => {
           <div className="rounded-lg border border-solid border-gray-200 bg-body dark:border-gray-700 dark:bg-dark">
             <div
               className="flex h-16 w-full cursor-pointer items-center justify-between p-3"
-              onClick={() => setIsExpand(!isExpand)}
+              onClick={() => setIsAvailableExpand(!isAvailableExpand)}
             >
               <CurrencySwapIcons from="BTC" to="ETH" />
 
               <span className="flex items-center text-sm text-gray-500 dark:text-gray-300">
-                Manage
+                Available Funds
                 <ChevronDown
                   className={`transition-all ltr:ml-1.5 rtl:mr-1.5 ${
-                    isExpand ? 'rotate-180' : 'rotate-0'
+                    isAvailableExpand ? 'rotate-180' : 'rotate-0'
                   }`}
                 />
               </span>
             </div>
-            <AnimatePresence initial={false}>
-              {isExpand && (
+            {/* <AnimatePresence initial={false}> */}
+              {isAvailableExpand && (
                 <motion.div
                   key="content"
                   initial="collapsed"
@@ -90,8 +92,131 @@ const LiquidityPositionPage: NextPageWithLayout = () => {
                   </div>
                 </motion.div>
               )}
-            </AnimatePresence>
+            {/* </AnimatePresence> */}
           </div>
+
+          <div className="rounded-lg border border-solid border-gray-200 bg-body dark:border-gray-700 dark:bg-dark">
+            <div
+              className="flex h-16 w-full cursor-pointer items-center justify-between p-3"
+              onClick={() => setIsLockedExpand(!isLockedExpand)}
+            >
+              <CurrencySwapIcons from="BTC" to="ETH" />
+
+              <span className="flex items-center text-sm text-gray-500 dark:text-gray-300">
+                Locked Funds
+                <ChevronDown
+                  className={`transition-all ltr:ml-1.5 rtl:mr-1.5 ${
+                    isLockedExpand ? 'rotate-180' : 'rotate-0'
+                  }`}
+                />
+              </span>
+            </div>
+            {/* <AnimatePresence initial={false}> */}
+              {isLockedExpand && (
+                <motion.div
+                  key="content"
+                  initial="collapsed"
+                  animate="open"
+                  exit="collapsed"
+                  variants={{
+                    open: { opacity: 1, height: 'auto' },
+                    collapsed: { opacity: 0, height: 0 },
+                  }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                >
+                  <div className="border-t border-dashed border-gray-200 p-4 dark:border-gray-700 sm:p-6">
+                    <div className="flex flex-col gap-3 xs:gap-[18px]">
+                      <TransactionInfo
+                        label="YOUR TOTAL POOL TOKEN:"
+                        value="22.51"
+                      />
+                      <TransactionInfo
+                        label="POOLED BTC:"
+                        value="0.01940272 BTC"
+                      />
+                      <TransactionInfo
+                        label="POOLED ETH:"
+                        value="0.14689574 ETH"
+                      />
+                      <TransactionInfo label="YOUR POOL SHARE:" value="0.06%" />
+                    </div>
+                    <Button
+                      size="large"
+                      shape="rounded"
+                      fullWidth={true}
+                      color="gray"
+                      className="mt-6 uppercase dark:bg-gray-800"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            {/* </AnimatePresence> */}
+          </div>
+
+
+          <div className="rounded-lg border border-solid border-gray-200 bg-body dark:border-gray-700 dark:bg-dark">
+            <div
+              className="flex h-16 w-full cursor-pointer items-center justify-between p-3"
+              onClick={() => setIsEarningExpand(!isEarningExpand)}
+            >
+              <CurrencySwapIcons from="BTC" to="ETH" />
+
+              <span className="flex items-center text-sm text-gray-500 dark:text-gray-300">
+                Earnings
+                <ChevronDown
+                  className={`transition-all ltr:ml-1.5 rtl:mr-1.5 ${
+                    isEarningExpand ? 'rotate-180' : 'rotate-0'
+                  }`}
+                />
+              </span>
+            </div>
+            {/* <AnimatePresence initial={false}> */}
+              {isEarningExpand && (
+                <motion.div
+                  key="content"
+                  initial="collapsed"
+                  animate="open"
+                  exit="collapsed"
+                  variants={{
+                    open: { opacity: 1, height: 'auto' },
+                    collapsed: { opacity: 0, height: 0 },
+                  }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                >
+                  <div className="border-t border-dashed border-gray-200 p-4 dark:border-gray-700 sm:p-6">
+                    <div className="flex flex-col gap-3 xs:gap-[18px]">
+                      <TransactionInfo
+                        label="YOUR TOTAL POOL TOKEN:"
+                        value="22.51"
+                      />
+                      <TransactionInfo
+                        label="POOLED BTC:"
+                        value="0.01940272 BTC"
+                      />
+                      <TransactionInfo
+                        label="POOLED ETH:"
+                        value="0.14689574 ETH"
+                      />
+                      <TransactionInfo label="YOUR POOL SHARE:" value="0.06%" />
+                    </div>
+                    <Button
+                      size="large"
+                      shape="rounded"
+                      fullWidth={true}
+                      color="gray"
+                      className="mt-6 uppercase dark:bg-gray-800"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            {/* </AnimatePresence> */}
+          </div>
+
+
 
           <div className="mt-4 grid grid-cols-2 gap-4">
             <Button

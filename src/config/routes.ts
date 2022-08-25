@@ -1,8 +1,7 @@
 const routes = {
   home: '/',
   dashboard: '/app/dashboard',
-  swap: '/swap',
-  liquidity: '/liquidity',
+  // swap: '/swap',
   liquidityPosition: '/liquidity-position',
   createQuest: '/app/create-quest',
   twitterQuestDetails: '/app/quests/twitter-quest',
@@ -16,6 +15,7 @@ const routes = {
   profile: '/app/profile',
   statistics: '/app/profile?view=statistics',
   quests: '/app/profile?view=quests',
+  availableFunds: '/app/manage-funds',
 };
 
 export default routes;

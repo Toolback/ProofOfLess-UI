@@ -151,7 +151,7 @@ InferGetStaticPropsType<typeof getStaticProps>
     <>
       <NextSeo
         title="Farms"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Proof Of Less - Web3 Protocol for a more virtuouse lifestyle"
       />
       <QuestDetailsFrame>
         <div className="mb-5 border-b border-dashed border-gray-400 pb-5 dark:border-gray-500 xs:mb-7 xs:pb-6">

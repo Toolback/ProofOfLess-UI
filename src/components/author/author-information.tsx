@@ -23,6 +23,7 @@ export default function AuthorInformation({
     userName: 'N/A',
     userBio: 'N/A',
     claimTime: '/',
+    cycleId: '/'
   };
   const { address, userDonutId } = useContext(WalletContext);
 
@@ -36,7 +37,7 @@ export default function AuthorInformation({
   useEffect(() => {
     setUserData(data);
   }, [data]);
-
+console.log("TEEEEST", userData)
   async function handleUpdateBio() {
     const connection = web3Modal && (await web3Modal.connect());
     const provider = new ethers.providers.Web3Provider(connection);
@@ -126,7 +127,7 @@ export default function AuthorInformation({
       {/* Join date */}
       <div className="border-y border-dashed border-gray-200 py-5 dark:border-gray-700 xl:py-6">
         <div className="text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-          Donut Minted : {userData.claimTime}
+          Donut Baked : Cycle {userData.cycleId} 
         </div>
       </div>
       {/* Report button */}

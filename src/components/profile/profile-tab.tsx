@@ -21,6 +21,8 @@ import PLUsdc from '@/lib/PLUsdc';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { ethers } from 'ethers';
 import IPLDiamond from '@/lib/PLDiamond';
+import Link from 'next/link';
+import DisplayUserFunds from '@/pages/display-funds';
 
 interface DonutDetailsProps {
   data : any
@@ -33,7 +35,6 @@ export default function ProfileTab({data}: DonutDetailsProps) {
   const [userNextPayment, setUserNextPayment] = useState("N/A")
 
 
-  console.log("data retrieved", data)
   const donutLevel = Number(data.level)
   
   const donutRank = Number(data.rank)
@@ -53,8 +54,10 @@ export default function ProfileTab({data}: DonutDetailsProps) {
       console.log("TEST REQ4 ?", req4)
       return userPUsdcBal 
     }
-    fetchData()
-    .then(e => console.log("res wallet data fetched ?", e))
+    if(address) {
+      fetchData()
+      .then(e => console.log("res wallet data fetched ?", e))  
+    }
   }, [data || address])
   const authorWallets = [
     {
@@ -135,20 +138,27 @@ export default function ProfileTab({data}: DonutDetailsProps) {
           </div>
         </div>
 
-        <div className="space-y-8 md:space-y-10 xl:space-y-12">
+        <DisplayUserFunds/>
+
+        {/* <div className="space-y-8 md:space-y-10 xl:space-y-12">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">
             {authorWallets.map((wallet) => (
               <ListCard item={wallet} key={wallet?.id} variant="medium" />
             ))}
           </div>
+          <Link
+          href="/app/manage-funds">
           <Button
             size="large"
             shape="rounded"
             fullWidth={true}
             className="mt-6 uppercase xs:mt-8 xs:tracking-widest xl:px-2 2xl:px-9"
-          >
+            >
             Manage
           </Button>
+            </Link> */}
+
+            
           {/* <div className="block">
             <h3 className="text-heading-style mb-3 uppercase text-gray-900 dark:text-white">
               Protocols
@@ -170,7 +180,7 @@ export default function ProfileTab({data}: DonutDetailsProps) {
               ))}
             </div>
           </div> */}
-        </div>
+        {/* </div> */}
       </TabPanel>
 
       {/* Collection page */}

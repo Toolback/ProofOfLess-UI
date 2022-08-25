@@ -2,11 +2,11 @@
 import FireWork from '@/assets/images/questNews/FireWork1.png';
 import GreenCable from '@/assets/images/questNews/GreenCable.png';
 import GreenBubble from '@/assets/images/questNews/GreenBubble.png';
-import BinanceImage from '@/assets/images/coin/binance.svg';
+import TwitterLogo from '@/assets/images/social-media/twitterx500blue.png';
 
 export const questNewsData = [
   {
-    id: '1',
+    id: '0',
     title: "What's New",
     subTitle: "in today's papers",
     description: 'Proof Of Less Protocol, Mumbai Launch !',
@@ -17,7 +17,18 @@ export const questNewsData = [
     color: '#FDEDD4',
   },
   {
-    id: '0',
+    id: '1',
+    title: "First Main Quest !",
+    subTitle: "Tweet Less Challenge",
+    description: "Sharing is one of the keys of life",
+    subDescription: "but as with everything, it's all in the measure!",
+    logo: TwitterLogo,
+    action: 'See more',
+    isActionCall: false,
+    color: '#D2ECFE',
+  },
+  {
+    id: '2',
     title: "Bonus Quests",
     subTitle: "lets do our best together",
     description: 'Less undesirable behaviors, for more virtuous ones?',
@@ -28,7 +39,7 @@ export const questNewsData = [
     color: '#DBE3FF',
   },
   {
-    id: '2',
+    id: '3',
     title: "What's Next ?",
     subTitle: "under the hood ...",
     description: "Want to know about upcoming updates ?",
@@ -38,15 +49,4 @@ export const questNewsData = [
     isActionCall: true,
     color: '#E1F9F1',
   },
-  // {
-  //   id: '3',
-  //   name: 'Binance',
-  //   symbol: 'BUSD',
-  //   balance: '240.55',
-  //   usdBalance: '340.24',
-  //   logo: BinanceImage,
-  //   change: '+1.5%',
-  //   isChangePositive: true,
-  //   color: '#FBF5D5',
-  // },
 ];

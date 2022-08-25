@@ -93,7 +93,7 @@ const AuthorProfilePage: NextPageWithLayout<
     <>
       <NextSeo
         title="Profile"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Proof Of Less - Web3 Protocol for a more virtuouse lifestyle"
       />
       {/* Profile Cover Image */}
       <div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 md:h-64 xl:h-80 2xl:h-96 3xl:h-[448px]">
@@ -145,7 +145,7 @@ const AuthorProfilePage: NextPageWithLayout<
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-center lg:justify-between">
+                <div className="flex items-center justify-center md:justify-between">
                   <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
                     {userData.userName}
                   </h2>

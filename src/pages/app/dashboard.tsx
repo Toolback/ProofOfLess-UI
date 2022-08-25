@@ -73,11 +73,11 @@ const DashBoard: NextPageWithLayout<
         description="Proof Of Less - Web3 Community for a more virtuouse lifestyle"
       />
       <div className="flex flex-wrap">
-        <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-[calc(100%-256px)] lg:w-[calc(100%-288px)] 2xl:w-[calc(100%-320px)] 3xl:w-[calc(100%-358px)]">
+        <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-full">
           <QuestNewsSlider questCards={questNewsData} />
         </div>
         {userDonutId === undefined || userDonutId === 0 ? (
-          <div className="w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
+          <div className="lg:hidden w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
             <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
               <Avatar
                 image={DonutImage}
@@ -95,7 +95,7 @@ const DashBoard: NextPageWithLayout<
             </div>
           </div>
         ) : (
-          <div className="w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
+          <div className="lg:hidden w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
             <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
               <Avatar
                 image={DonutImage}
@@ -116,18 +116,56 @@ const DashBoard: NextPageWithLayout<
       </div>
 
       <div className="mt-8 flex flex-wrap">
-        <div className="w-full lg:w-[calc(100%-288px)] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[calc(100%-320px)] 3xl:w-[calc(100%-358px)]">
+        <div className="w-full mb-4 ltr:lg:pr-6 rtl:lg:pl-6 ">
           {/* {!isLoading && */}
                   <MainQuests_Table activeQuestData={props.activeQuestData} />
 
           {/* } */}
           </div>
-        <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mt-0 lg:mb-0 lg:flex lg:w-72 lg:flex-col 2xl:w-80 3xl:w-[358px]">
+        <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-auto">
           <OverviewChart totalUsers={props.totalUsers} />
           <TopQuests
             twitterQuestUsers={renderTwitterParticipants}
           />
         </div>
+        {userDonutId === undefined || userDonutId === 0 ? (
+          <div className="invisible md:visible mt-2 w-full mr-6 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
+            <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
+              <Avatar
+                image={DonutImage}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+              <h3 className="mb-2 text-center text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 3xl:mb-3">
+                {mintMessage}
+              </h3>
+              <div className="mb-7 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
+                {/* {balance} */}
+              </div>
+              {userDonutId > 1 ? <TopupButton /> : <MintDonutButton />}
+            </div>
+          </div>
+        ) : (
+          <div className="invisible md:visible mt-2 mr-6 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
+            <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
+              <Avatar
+                image={DonutImage}
+                alt="Author"
+                className="mx-auto mb-6"
+                size="lg"
+              />
+              <h3 className="mb-2 text-center text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 3xl:mb-3">
+                My Balance
+              </h3>
+              <div className="mb-7 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
+                {balance}
+              </div>
+              <TopupButton />
+            </div>
+          </div>
+        )}
+
       </div>
     </>
   );

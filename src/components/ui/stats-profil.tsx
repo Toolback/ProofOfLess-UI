@@ -131,15 +131,6 @@ function StatsDetails({ statsType, data }: StatsDetailsProps) {
             <span>To Next Rank</span>
             <span>100</span>
           </div>
-          <Input placeholder="Less To Stake"/>
-          <Button
-            size="large"
-            shape="rounded"
-            fullWidth={true}
-            className="mt-6 uppercase xs:mt-8 xs:tracking-widest xl:px-2 2xl:px-9"
-          >
-            Stake
-          </Button>
         </div>
       )}
       {statsType === 'Global' && (

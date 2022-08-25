@@ -15,7 +15,7 @@ const SwapPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Farms"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Proof Of Less - Web3 Protocol for a more virtuouse lifestyle"
       />
       <Trade>
         <div className="mb-5 border-b border-dashed border-gray-200 pb-5 dark:border-gray-800 xs:mb-7 xs:pb-6">

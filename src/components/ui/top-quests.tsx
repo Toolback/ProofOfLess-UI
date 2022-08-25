@@ -3,7 +3,7 @@ import CurrencySwapIcons from '@/components/ui/currency-swap-icons';
 import { CoinList } from '@/components/ui/currency-swap-icons';
 
 interface TopPoolsProps {
-  twitterQuestUsers: number;
+  twitterQuestUsers: number | string;
 }
 
 export default function TopQuests({ twitterQuestUsers }: TopPoolsProps) {
@@ -17,7 +17,7 @@ export default function TopQuests({ twitterQuestUsers }: TopPoolsProps) {
       </div>
 
           <div
-            className="mb-5 flex items-center justify-between text-sm text-gray-900 last:mb-0 dark:text-white"
+            className="mb-5 flex items-center gap-10 justify-between text-sm text-gray-900 last:mb-0 dark:text-white"
           >
             <div className="col-span-2 flex items-center gap-2">
               {/* <CurrencySwapIcons from={from} to={to} /> */}
