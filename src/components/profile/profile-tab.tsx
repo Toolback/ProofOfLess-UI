@@ -16,25 +16,42 @@ import Wallet from '@/assets/images/portfolio/wallet.svg';
 import Nft from '@/assets/images/portfolio/nft.svg';
 import Deposit from '@/assets/images/portfolio/deposit.svg';
 import Claimable from '@/assets/images/portfolio/claimable.svg';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PLUsdc from '@/lib/PLUsdc';
 import { WalletContext } from '@/lib/hooks/use-connect';
+import { ethers } from 'ethers';
+import IPLDiamond from '@/lib/PLDiamond';
 
 interface DonutDetailsProps {
   data : any
 }
 export default function ProfileTab({data}: DonutDetailsProps) {
   const { address, userDonutId } = useContext(WalletContext);
+  const [userPUsdcBal, setUserPUsdcBal] = useState("N/A")
+  const [userLockedFund, setUserLockedFund] = useState("N/A")
+  const [userLessBal, setUserLessBal] = useState("N/A")
+  const [userNextPayment, setUserNextPayment] = useState("N/A")
+
 
   console.log("data retrieved", data)
-  let donutLevel = Number(data.level)
+  const donutLevel = Number(data.level)
   
-  let donutRank = Number(data.rank)
+  const donutRank = Number(data.rank)
   useEffect(() => {
     const fetchData = async () => {
-      let PUsdc = await PLUsdc()
-      let req = await PUsdc.balanceOf(address)
-      console.log("test bal", req)
+      const PUsdc = await PLUsdc();
+      const req1 = await PUsdc.balanceOf(address)
+      setUserPUsdcBal(ethers.utils.formatEther(`${Number(req1)}`))
+      const PLd = await IPLDiamond()
+      const req2 = await PLd.getUserLockedFundsByQuest(1, address, PUsdc.address) // for twitter quest
+      setUserLockedFund(ethers.utils.formatEther(`${Number(req2)}`))
+      const req3 = await PLd.balanceOfBatch([address], [0]) // balanceOf Item bug ? Or just me ?
+      setUserLessBal(Number(req3).toString())
+      const req4 = await PLd.isUserInWaitingList(1, address)
+      req4 ? setUserNextPayment("-10") : setUserNextPayment("0")
+      
+      console.log("TEST REQ4 ?", req4)
+      return userPUsdcBal 
     }
     fetchData()
     .then(e => console.log("res wallet data fetched ?", e))
@@ -44,25 +61,25 @@ export default function ProfileTab({data}: DonutDetailsProps) {
       id: 1,
       name: 'WALLET',
       logo: Wallet,
-      balance: '40 PUsdc',
+      balance: `${userPUsdcBal} PUsdc`,
     },
     {
       id: 2,
       name: 'LOCKED',
       logo: Nft,
-      balance: '10 PUsdc',
+      balance: `${userLockedFund} PUsdc`,
     },
     {
       id: 3,
       name: 'REWARD',
       logo: Claimable,
-      balance: '150 Less',
+      balance: `${userLessBal} Less`,
     },
     {
       id: 4,
       name: 'NEXT PAYMENT',
       logo: Deposit,
-      balance: '-10 PUsdc',
+      balance: `${userNextPayment} Less`,
     },
   ];
   return (
