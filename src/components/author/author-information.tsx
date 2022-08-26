@@ -37,7 +37,6 @@ export default function AuthorInformation({
   useEffect(() => {
     setUserData(data);
   }, [data]);
-console.log("TEEEEST", userData)
   async function handleUpdateBio() {
     const connection = web3Modal && (await web3Modal.connect());
     const provider = new ethers.providers.Web3Provider(connection);

@@ -81,7 +81,6 @@ const AuthorProfilePage: NextPageWithLayout<
   };
 
   const handleChangeUserName = async () => {
-    console.log('TEST CHANGE USERNAME INPUTS', userDonutId, newUserName);
     const connection = web3Modal && (await web3Modal.connect());
     const provider = new ethers.providers.Web3Provider(connection);
     let signer = await provider.getSigner();

@@ -7,7 +7,6 @@ interface TopPoolsProps {
 }
 
 export default function TopQuests({ twitterQuestUsers }: TopPoolsProps) {
-  console.log("text", twitterQuestUsers)
   return (
     <div className="rounded-lg bg-white p-6 shadow-card dark:bg-light-dark sm:p-8">
       <h3 className="mb-6 text-base font-medium uppercase">Top Quests</h3>

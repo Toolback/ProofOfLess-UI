@@ -14,7 +14,6 @@ export default function DisplayUserFunds({data} : any) {
   let [isAvailableExpand, setIsAvailableExpand] = useState(false);
   let [isLockedExpand, setIsLockedExpand] = useState(false);
   let [isEarningExpand, setIsEarningExpand] = useState(false);
-  console.log("RETURNED USER FUNDS ? ", data)
   return (
     <>
       <Alert>

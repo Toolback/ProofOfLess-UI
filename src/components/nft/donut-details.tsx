@@ -54,7 +54,6 @@ function DonutFooter({
       '0x8b4D1a27183Ed1cD848AC7D345B0322575eD2B74',
       ethers.utils.parseEther("10")
     );
-    console.log('REQ AFTER APPROVE', req1_5);
     let req2 = await ID.mintDonut(address, 1);
   };
 

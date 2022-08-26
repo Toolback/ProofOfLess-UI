@@ -70,12 +70,12 @@ const DashBoard: NextPageWithLayout=() => {
       const data = await retrieveAllListedQuests()
       setActiveQuestData(data.activeQuestData)
       setTotalUsers(data.totalUsers)
+      return(data)
     }
     fetchData().then( e => console.log('useEffect ended', e))
-  }, [])
+  }, [userDonutId])
   const renderTwitterParticipants:string = activeQuestData[0]? (activeQuestData[0].participants.toString()) : "N/A" 
   
-  // console.log('RETURN QUESTDATA DASHBOARD',props);
 
   return (
     <>
@@ -88,7 +88,7 @@ const DashBoard: NextPageWithLayout=() => {
           <QuestNewsSlider questCards={questNewsData} />
         </div>
         {userDonutId === undefined || userDonutId === 0 ? (
-          <div className="lg:hidden w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
+          <div className="sm:hidden w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
             <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
               <Avatar
                 image={DonutImage}
@@ -106,7 +106,7 @@ const DashBoard: NextPageWithLayout=() => {
             </div>
           </div>
         ) : (
-          <div className="lg:hidden w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
+          <div className="sm:hidden w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
             <div className="flex h-full flex-col justify-center rounded-lg bg-white p-6 shadow-card dark:bg-light-dark xl:p-8">
               <Avatar
                 image={DonutImage}

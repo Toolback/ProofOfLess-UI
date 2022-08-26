@@ -35,7 +35,6 @@ export async function retrieveAllListedQuests() {
     })
     const req2 = await instance.totalSupply();
     const totalUsers = Number(req2)
-    console.log("GETM Resultats", allQuestsData, totalUsers)
     return {
         activeQuestData: await allQuestsData,
         totalUsers
