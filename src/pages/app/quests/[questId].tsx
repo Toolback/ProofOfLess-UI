@@ -69,42 +69,46 @@ const QuestPageDetails: NextPageWithLayout<
 InferGetStaticPropsType<typeof getStaticProps>
 > = (props) => {
   const { address } = useContext(WalletContext);
+  const [userWaitingListStatus, setUserWaitingListStatus] = useState(false)
+  const [userParticipantStatus, setUserParticipantStatus] = useState(false)
 
   let q = props.quest
 
-  const isSubscribed = () => {
-    const req = (q.waitingListAddress.includes(address));
-    let res;
-    req ? (
-      res = "✅"
-    ):(
-      res = "❌"
-    )
-    return res
+  function isSubscribed () {
+    const req = q.waitingListAddress.includes(address)
+    setUserWaitingListStatus(req);
+    // userWaitingListStatus ? (
+    //   setUserWaitingListStatus(true)
+    // ):(
+    //   setUserWaitingListStatus(false)
+    // )
+    return userWaitingListStatus
   }
 
-  const isParticipant = () => {
-    const req = (q.participants.includes(address));
-    let res
-    req ? (
-      res = "✅"
-    ):(
-      res = "❌"
-    )
-    return res  }
+  function isParticipant () {
+    const req = q.participants.includes(address);
+    setUserParticipantStatus(req)
+    return userParticipantStatus  
+  }
 
   const handleSubscribe = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner(address)
     const instance = await IPLDiamond(signer);
-    await instance.subscribeToWaitingList(q.questId)
+    const req = await instance.subscribeToWaitingList(q.questId)
+    await req.wait()
+    setUserWaitingListStatus(true);
+
   }
 
   const handleUnsubscribe = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner(address)
     const instance = await IPLDiamond(signer);
-    await instance.unsubscribeFromWaitingList(q.questId, address)
+    const req = await instance.unsubscribeFromWaitingList(q.questId, address)
+    await req.wait()
+    setUserWaitingListStatus(false);
+
   }
 
   const renderActionCall = () => {
@@ -120,7 +124,7 @@ InferGetStaticPropsType<typeof getStaticProps>
           CONNECT
         </Button>
       )
-    } else if (isSubscribed() === "true") {
+    } else if (userWaitingListStatus === true) {
       return (
         <Button
         onClick={() => handleUnsubscribe()}
@@ -188,11 +192,11 @@ InferGetStaticPropsType<typeof getStaticProps>
         <div className='flex justify-around'>
           <div className='flex flex-col text-center gap-2'>
           <span>Subscribed</span>
-          <span>{isSubscribed()}</span>
+          <span>{userWaitingListStatus ? ("✅") : ("❌")}</span>
           </div>
           <div className='flex flex-col text-center gap-2'>
           <span>Participe</span>
-          <span>{isParticipant()}</span>
+          <span>{userParticipantStatus ? ("✅") : ("❌")}</span>
           </div>
         </div>
         {renderActionCall()}
