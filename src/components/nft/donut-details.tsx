@@ -40,6 +40,7 @@ function DonutFooter({
   cycleMaxSupply,
 }: DonutFooterProps) {
   const { openModal } = useModal();
+  const {setUserStatus } = useContext(WalletContext);
 
   const handleMintDonut = async (address: String) => {
     const connection = web3Modal && (await web3Modal.connect());
@@ -50,11 +51,14 @@ function DonutFooter({
     // let provider = new ethers.providers.Web3Provider(address);
     let ID = await IPLDiamond(signer);
     let IT = await PLUsdc(signer);
-    let req1_5 = await IT.approve(
-      '0x8b4D1a27183Ed1cD848AC7D345B0322575eD2B74',
-      ethers.utils.parseEther("10")
-    );
-    let req2 = await ID.mintDonut(address, 1);
+    // let req1_5 = await IT.approve(
+    //   '0x8b4D1a27183Ed1cD848AC7D345B0322575eD2B74',
+    //   ethers.utils.parseEther("10")
+    // );
+    let req2 = await ID.mintDonut(address, 1); //address to sent / cycleId
+    req2.wait()
+    setUserStatus("isMember")
+
   };
 
   const handleMintFreePUsdc = async () => {
@@ -64,8 +68,8 @@ function DonutFooter({
 
     let IT = await PLUsdc(signer);
     let req = await IT.mint(address, ethers.utils.parseEther("100"))
+    req.wait()
     console.log("Mint Succeed !", req)
-
   }
 
   const renderMintDonutButton = (userStatus: String, address: String) => {

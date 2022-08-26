@@ -28,73 +28,12 @@ interface DonutDetailsProps {
   data : any
 }
 export default function ProfileTab({data}: DonutDetailsProps) {
-  const { address, userDonutId } = useContext(WalletContext);
-  const [userPUsdcBal, setUserPUsdcBal] = useState("N/A")
-  const [userLockedFund, setUserLockedFund] = useState("N/A")
-  const [userLessBal, setUserLessBal] = useState("N/A")
-  const [userNextPayment, setUserNextPayment] = useState("N/A")
-  const [userTwitterData, setUserTwitterData] = useState("N/A")
-
-  let fundsData =  {
-    userPUsdcBal,
-    userLockedFund,
-    userLessBal,
-    userNextPayment,
-    userStakedAmount : data.stakedAmount,
-    userTwitterData
-  }
 
   const donutLevel = Number(data.level)
   
   const donutRank = Number(data.rank)
-  useEffect(() => {
-    const fetchData = async () => {
-      const PUsdc = await PLUsdc();
-      const req1 = await PUsdc.balanceOf(address)
-      setUserPUsdcBal(ethers.utils.formatEther(`${Number(req1)}`))
-      const PLd = await IPLDiamond()
-      const req2 = await PLd.getUserLockedFundsByQuest(1, address, PUsdc.address) // for twitter quest
-      setUserLockedFund(ethers.utils.formatEther(`${Number(req2)}`))
-      const req3 = await PLd.balanceOfBatch([address], [0]) // balanceOf Item bug ? Or just me ?
-      setUserLessBal(Number(req3).toString())
-      const req4 = await PLd.isUserInWaitingList(1, address)
-      req4 ? setUserNextPayment("-10") : setUserNextPayment("0")
-      const req5 = await PLd.getUserQuestData(1, address)
-      setUserTwitterData(req5)
 
-      return userPUsdcBal 
-    }
-    if(address) {
-      fetchData()
-      .then(e => console.log("res wallet data fetched ?", e))  
-    }
-  }, [data || address])
-  const authorWallets = [
-    {
-      id: 1,
-      name: 'WALLET',
-      logo: Wallet,
-      balance: `${userPUsdcBal} PUsdc`,
-    },
-    {
-      id: 2,
-      name: 'LOCKED',
-      logo: Nft,
-      balance: `${userLockedFund} PUsdc`,
-    },
-    {
-      id: 3,
-      name: 'REWARD',
-      logo: Claimable,
-      balance: `${userLessBal} Less`,
-    },
-    {
-      id: 4,
-      name: 'NEXT PAYMENT',
-      logo: Deposit,
-      balance: `${userNextPayment} Less`,
-    },
-  ];
+
   return (
     <ParamTab
       tabMenu={[
@@ -148,7 +87,7 @@ export default function ProfileTab({data}: DonutDetailsProps) {
           </div>
         </div>
 
-        <DisplayUserFunds data={fundsData}/>
+        <DisplayUserFunds data={data} />
 
         {/* <div className="space-y-8 md:space-y-10 xl:space-y-12">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">

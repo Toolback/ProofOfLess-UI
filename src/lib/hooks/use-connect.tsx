@@ -151,6 +151,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         connectToWallet,
         disconnectWallet,
         userStatus,
+        setUserStatus,
         IDiamond,
         IMainToken
       }}
