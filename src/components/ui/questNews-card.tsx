@@ -74,7 +74,7 @@ interface QuestNewsSliderProps {
 export default function QuestNewsSlider({ questCards }: QuestNewsSliderProps) {
   const sliderBreakPoints = {
     768: {
-      slidesPerView: 2,
+      slidesPerView: 3,
       spaceBetween: 20,
     },
     1080: {
@@ -82,7 +82,7 @@ export default function QuestNewsSlider({ questCards }: QuestNewsSliderProps) {
       spaceBetween: 24,
     },
     1280: {
-      slidesPerView: 2,
+      slidesPerView: 3,
       spaceBetween: 24,
     },
     1700: {

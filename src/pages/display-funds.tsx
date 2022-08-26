@@ -10,15 +10,16 @@ import Alert from '@/components/ui/alert';
 import CurrencySwapIcons from '@/components/ui/currency-swap-icons';
 import Input from '@/components/ui/forms/input';
 
-export default function DisplayUserFunds() {
+export default function DisplayUserFunds({data} : any) {
   let [isAvailableExpand, setIsAvailableExpand] = useState(false);
   let [isLockedExpand, setIsLockedExpand] = useState(false);
   let [isEarningExpand, setIsEarningExpand] = useState(false);
+  console.log("RETURNED USER FUNDS ? ", data)
   return (
     <>
       <Alert>
         <h4 className="mb-3 text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-          Your Choices, Your Voice
+          Your Choices, Your Voice !
         </h4>
         <p className="m-0 text-sm leading-relaxed tracking-tighter text-gray-600 dark:text-gray-400">
           Manage your assets to shape your donuts, as well as your ideas within
@@ -61,7 +62,7 @@ export default function DisplayUserFunds() {
               <div className="border-t border-dashed border-gray-200 p-4 dark:border-gray-700 sm:p-6">
                 <div className="flex flex-col gap-3 xs:gap-[18px]">
                   
-                <TransactionInfo label="LESS:" value="0.14689574 LESS" />
+                <TransactionInfo label="LESS:" value={`${data?.userLessBal}`} />
                 <Input
                   placeholder="Less To Stake"
                   type="number"
@@ -78,22 +79,34 @@ export default function DisplayUserFunds() {
                 </Button>
 
 
-                  <TransactionInfo label="NEXT QUEST COSTS:" value="22.51" />
-                  <TransactionInfo label="PUSDC:" value="0.01940272 PUSDC" />
+                  <TransactionInfo label="NEXT QUESTS COSTS:" value={`${data?.userNextPayment} PUSDC`} />
+                  <TransactionInfo label="PUSDC:" value={`${data?.userPUsdcBal}`} />
                   <Input
-                    placeholder="Less To Stake"
+                    placeholder="Amount To Supply / Or Withdraw"
                     type="number"
                     inputMode="decimal"
                   />
+                  <div className='flex justify-around'>
+
                   <Button
                     size="large"
                     shape="rounded"
-                    fullWidth={true}
+                    fullWidth={false}
                     color="gray"
                     className="mt-6 uppercase dark:bg-gray-800"
                   >
-                    Stake
+                    Supply
                   </Button>
+                  <Button
+                    size="large"
+                    shape="rounded"
+                    fullWidth={false}
+                    color="gray"
+                    className="mt-6 uppercase dark:bg-gray-800"
+                    >
+                    Withdraw
+                  </Button>
+                    </div>
                 </div>
               </div>
             </motion.div>
@@ -133,16 +146,16 @@ export default function DisplayUserFunds() {
               <div className="border-t border-dashed border-gray-200 p-4 dark:border-gray-700 sm:p-6">
                 <div className="flex flex-col gap-3 xs:gap-[18px]">
                   <TransactionInfo
-                    label="YOUR TOTAL LOCKED TOKENS:"
-                    value="22.51 PUSDC"
+                    label="TOTAL LOCKED TOKENS:"
+                    value={`${data?.userLockedFund} PUSDC`}
                   />
                   <TransactionInfo
-                    label="TWITTER QUEST POOLED PUSDC:"
-                    value="22.51"
+                    label="TWITTER QUEST LOCKED:"
+                    value={`${data?.userLockedFund} PUSDC`}
                   />
                   <TransactionInfo
                     label="STAKED LESS:"
-                    value="0.14689574"
+                    value={`${data?.userStakedAmount}`}
                   />
                   {/* <TransactionInfo label="YOUR POOL SHARE:" value="0.06%" /> */}
                 </div>
@@ -184,11 +197,11 @@ export default function DisplayUserFunds() {
               <div className="border-t border-dashed border-gray-200 p-4 dark:border-gray-700 sm:p-6">
                 <div className="flex flex-col gap-3 xs:gap-[18px]">
                   <TransactionInfo
-                    label="YOUR TOTAL TOKEN DEPOSITED:"
-                    value="22.51 PUSDC"
+                    label="TOTAL TOKEN DEPOSITED:"
+                    value={`${Number(data?.userTwitterData?.totalFunding)} PUSDC`}
                   />
-                  <TransactionInfo label="PUSDC GAIN:" value="58.01940272" />
-                  <TransactionInfo label="LESS GAIN:" value="10" />
+                  <TransactionInfo label="PUSDC GAIN:" value={`${Number(data?.userTwitterData?.totalGain)} PUSDC`} />
+                  <TransactionInfo label="LESS GAIN:" value="/" />
                 </div>
               </div>
             </motion.div>

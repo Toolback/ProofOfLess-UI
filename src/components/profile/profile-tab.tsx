@@ -33,7 +33,16 @@ export default function ProfileTab({data}: DonutDetailsProps) {
   const [userLockedFund, setUserLockedFund] = useState("N/A")
   const [userLessBal, setUserLessBal] = useState("N/A")
   const [userNextPayment, setUserNextPayment] = useState("N/A")
+  const [userTwitterData, setUserTwitterData] = useState("N/A")
 
+  let fundsData =  {
+    userPUsdcBal,
+    userLockedFund,
+    userLessBal,
+    userNextPayment,
+    userStakedAmount : data.stakedAmount,
+    userTwitterData
+  }
 
   const donutLevel = Number(data.level)
   
@@ -50,8 +59,9 @@ export default function ProfileTab({data}: DonutDetailsProps) {
       setUserLessBal(Number(req3).toString())
       const req4 = await PLd.isUserInWaitingList(1, address)
       req4 ? setUserNextPayment("-10") : setUserNextPayment("0")
-      
-      console.log("TEST REQ4 ?", req4)
+      const req5 = await PLd.getUserQuestData(1, address)
+      setUserTwitterData(req5)
+
       return userPUsdcBal 
     }
     if(address) {
@@ -138,7 +148,7 @@ export default function ProfileTab({data}: DonutDetailsProps) {
           </div>
         </div>
 
-        <DisplayUserFunds/>
+        <DisplayUserFunds data={fundsData}/>
 
         {/* <div className="space-y-8 md:space-y-10 xl:space-y-12">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">

@@ -73,7 +73,7 @@ const DashBoard: NextPageWithLayout<
         description="Proof Of Less - Web3 Community for a more virtuouse lifestyle"
       />
       <div className="flex flex-wrap">
-        <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-full">
+        <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:ltr:pr-6 sm:rtl:pl-6 md:w-full ">
           <QuestNewsSlider questCards={questNewsData} />
         </div>
         {userDonutId === undefined || userDonutId === 0 ? (
