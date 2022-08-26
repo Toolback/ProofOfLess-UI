@@ -143,7 +143,7 @@ export default function MainQuests_Table({
 }: {
   activeQuestData: ActiveQuestData[];
 }) {
-  const data = React.useMemo(() => activeQuestData, []);
+  const data = React.useMemo(() => activeQuestData, [activeQuestData]);
   const columns = React.useMemo(() => COLUMNS, []);
   const {
     getTableProps,

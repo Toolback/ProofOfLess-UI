@@ -26,21 +26,21 @@ import TopQuests from '@/components/ui/top-quests';
 import { useQuery } from 'react-query';
 import { retrieveAllListedQuests } from '@/data/bc/get-quests-data';
 
-export const getStaticProps: GetStaticProps = async () => {
-  const data = await retrieveAllListedQuests()
-  console.log("Listed Quest data here ??", data)
-  let activeQuestData = data.activeQuestData
-  let totalUsers = data.totalUsers
+// export const getStaticProps: GetStaticProps = async () => {
+//   const data = await retrieveAllListedQuests()
+//   console.log("Listed Quest data here ??", data)
+//   let activeQuestData = data.activeQuestData
+//   let totalUsers = data.totalUsers
 
-  return {
-    props: {
-      activeQuestData,
-      totalUsers
-    },
-    revalidate: 10, // In seconds
+//   return {
+//     props: {
+//       activeQuestData,
+//       totalUsers
+//     },
+//     revalidate: 10, // In seconds
 
-  };
-};
+//   };
+// };
 // export interface  ActiveQuestData {
 //   questName: string,
 //   questId: number,
@@ -55,16 +55,27 @@ export const getStaticProps: GetStaticProps = async () => {
 //     totalUsers?: number
 //   }
 
-const DashBoard: NextPageWithLayout<
-  InferGetStaticPropsType<typeof getStaticProps>
-> = (props) => {
-
+// const DashBoard: NextPageWithLayout<
+//   InferGetStaticPropsType<typeof getStaticProps>
+// > = (props) => {
+const DashBoard: NextPageWithLayout=() => {
   const { balance, userDonutId } = useContext(WalletContext);
   const [isLoading, setLoading] = useState(false)
+  const [activeQuestData, setActiveQuestData] = useState([])
+  const [totalUsers, setTotalUsers] = useState(0)
   const mintMessage: string = `This ID (Identity Donut) is unique. And might be yours ! `;
-  const renderTwitterParticipants:string = props.activeQuestData[0]? (props.activeQuestData[0].participants.toString()) : "110" 
+
+  useEffect(() => {
+    const fetchData = async() => {
+      const data = await retrieveAllListedQuests()
+      setActiveQuestData(data.activeQuestData)
+      setTotalUsers(data.totalUsers)
+    }
+    fetchData().then( e => console.log('useEffect ended', e))
+  }, [])
+  const renderTwitterParticipants:string = activeQuestData[0]? (activeQuestData[0].participants.toString()) : "N/A" 
   
-  console.log('RETURN QUESTDATA DASHBOARD',props);
+  // console.log('RETURN QUESTDATA DASHBOARD',props);
 
   return (
     <>
@@ -118,12 +129,12 @@ const DashBoard: NextPageWithLayout<
       <div className="mt-8 flex flex-wrap">
         <div className="w-full mb-4 ltr:lg:pr-6 rtl:lg:pl-6 ">
           {/* {!isLoading && */}
-                  <MainQuests_Table activeQuestData={props.activeQuestData} />
+                  <MainQuests_Table activeQuestData={activeQuestData} />
 
           {/* } */}
           </div>
         <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-auto">
-          <OverviewChart totalUsers={props.totalUsers} />
+          <OverviewChart totalUsers={totalUsers} />
           <TopQuests
             twitterQuestUsers={renderTwitterParticipants}
           />
