@@ -145,7 +145,7 @@ export default function DisplayUserFunds({data} : any) {
                 <div className="flex flex-col gap-3 xs:gap-[18px]">
                   
                 <TransactionInfo label="LESS:" value={`${userLessBal}`} />
-                <Input
+                {/* <Input
                   placeholder="Less To Stake"
                   type="number"
                   // inputMode="decimal"
@@ -158,7 +158,7 @@ export default function DisplayUserFunds({data} : any) {
                   className="mt-6 uppercase dark:bg-gray-800"
                 >
                   Stake
-                </Button>
+                </Button> */}
 
 
                   <TransactionInfo label="NEXT QUESTS COSTS:" value={`${userNextPayment} PUSDC`} />
