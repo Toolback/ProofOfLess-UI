@@ -40,7 +40,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
     checkConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userStatus]);
 
   const setWalletAddress = async (provider: any) => {
     try {

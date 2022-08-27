@@ -56,8 +56,8 @@ function DonutFooter({
     //   ethers.utils.parseEther("10")
     // );
     let req2 = await ID.mintDonut(address, 1); //address to sent / cycleId
-    req2.wait()
-    setUserStatus("isMember")
+    req2.wait().then(() => setUserStatus("isMember"))
+    
 
   };
 
@@ -75,7 +75,11 @@ function DonutFooter({
   const renderMintDonutButton = (userStatus: String, address: String) => {
     switch (userStatus) {
       case 'isMember':
-        return <Button shape="rounded">Go To Profil</Button>;
+        return (
+        <Link href="/app/profile">
+          <Button shape="rounded">Go To Profile</Button>
+          </Link>
+          );
       case 'isVisitor':
         return (
           <Button onClick={() => handleMintDonut(address)} shape="rounded">

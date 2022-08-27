@@ -42,7 +42,7 @@ const AuthorProfilePage: NextPageWithLayout<
 > = (props) => {
   let [copyButtonStatus, setCopyButtonStatus] = useState(false);
   let [_, copyToClipboard] = useCopyToClipboard();
-  const { address, userDonutId } = useContext(WalletContext);
+  const { address, userDonutId, userStatus } = useContext(WalletContext);
   const [numberQuestJoined, setNumberQuestJoined] = useState(0);
   const [changeNameActive, setChangeNameActive] = useToggle(false);
 
@@ -70,7 +70,7 @@ const AuthorProfilePage: NextPageWithLayout<
     if (userDonutId > 0) {
       fetchData().catch(console.error);
     }
-  }, [userDonutId]);
+  }, [userDonutId, userStatus]);
 
   const handleCopyToClipboard = () => {
     copyToClipboard(address);
