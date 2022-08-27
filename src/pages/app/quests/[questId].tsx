@@ -13,6 +13,7 @@ import IPLDiamond from '@/lib/PLDiamond';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { ethers, providers } from 'ethers';
+import LoadingScreen from '@/layouts/_loading-screen';
 
 // export const getStaticPaths: GetStaticPaths = async () => {
 //   let instance = await IPLDiamond();
@@ -65,6 +66,7 @@ import { ethers, providers } from 'ethers';
 // }
 const QuestPageDetails: NextPageWithLayout = () => {
   const { address } = useContext(WalletContext);
+  const [isLoading, setLoading] = useState(false);
   const [userWaitingListStatus, setUserWaitingListStatus] = useState(false);
   const [userParticipantStatus, setUserParticipantStatus] = useState(false);
   let Q = {
@@ -149,6 +151,7 @@ const QuestPageDetails: NextPageWithLayout = () => {
     const fetchUserStatus = async () => {
       const instance = await IPLDiamond();
       if(address) {
+        console.log("ARRIVED HERE", address)
         const req = await instance.isUserInWaitingList(1, address);
         // req.wait()
         const req2 = await instance.isUserInQuest(1, address);
@@ -158,21 +161,28 @@ const QuestPageDetails: NextPageWithLayout = () => {
         setUserParticipantStatus(req2);
       }
     }
+    // setLoading(true)
     fetchData().then(async (e) => {
       await fetchUserStatus();
     });
-  }, [reload]);
+    // setLoading(false)
+  }, [address, reload]);
 
   const handleSubscribe = async () => {
+    setLoading(true)
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner(address);
     const instance = await IPLDiamond(signer);
     const req = await instance.subscribeToWaitingList(qData.questId);
-    await req.wait();
-    setReload(!reload)
+    await req.wait().then(() => {
+      setReload(!reload)
+      setLoading(false)
+    });
+    
   };
 
   const handleUnsubscribe = async () => {
+    setLoading(true)
     const arr = qData.waitingListAddress;
     const idx = arr.indexOf(address);
     console.log('test IDX', idx, arr);
@@ -184,8 +194,10 @@ const QuestPageDetails: NextPageWithLayout = () => {
       address,
       idx
     );
-    await req.wait();
-    setReload(!reload)
+    await req.wait().then(() => {
+      setReload(!reload)
+      setLoading(false)
+    })
   };
 
   const renderActionCall = () => {
@@ -235,6 +247,7 @@ const QuestPageDetails: NextPageWithLayout = () => {
         description="Proof Of Less - Web3 Protocol for a more virtuouse lifestyle"
       />
       <QuestDetailsFrame>
+        {isLoading && <LoadingScreen/>}
         <div className="mb-5 border-b border-dashed border-gray-400 pb-5 dark:border-gray-500 xs:mb-7 xs:pb-6">
           <h2 className="mb-4 text-center text-3xl text-black dark:text-gray-200">
             Twitter Quest
