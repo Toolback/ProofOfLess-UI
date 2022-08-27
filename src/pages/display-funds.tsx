@@ -63,7 +63,7 @@ export default function DisplayUserFunds({data} : any) {
     userLockedFund,
     userLessBal,
     userNextPayment,
-    userStakedAmount : data.stakedAmount,
+    // userStakedAmount : data.stakedAmount,
     userTwitterData
   }
 
