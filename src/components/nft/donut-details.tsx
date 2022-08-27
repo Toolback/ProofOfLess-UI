@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import cn from 'classnames';
 import { StaticImageData } from 'next/image';
@@ -18,6 +18,7 @@ import IPLDiamond from '@/lib/PLDiamond';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 import Link from 'next/link';
+import LoadingScreen from '@/layouts/_loading-screen';
 
 
 interface DonutFooterProps {
@@ -41,8 +42,10 @@ function DonutFooter({
 }: DonutFooterProps) {
   const { openModal } = useModal();
   const {setUserStatus } = useContext(WalletContext);
+  const [isLoading, setLoading] = useState(false);
 
   const handleMintDonut = async (address: String) => {
+    setLoading(true)
     const connection = web3Modal && (await web3Modal.connect());
     const provider = new ethers.providers.Web3Provider(connection);
     let signer = await provider.getSigner();
@@ -56,7 +59,10 @@ function DonutFooter({
     //   ethers.utils.parseEther("10")
     // );
     let req2 = await ID.mintDonut(address, 1); //address to sent / cycleId
-    req2.wait().then(() => setUserStatus("isMember"))
+    req2.wait().then(() => {
+      setUserStatus("isMember")
+      setLoading(false)
+    })
     
 
   };
@@ -105,6 +111,7 @@ function DonutFooter({
         className
       )}
     >
+      {isLoading && <LoadingScreen/>}
       <div className="-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
         <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
           <div className="block w-1/2 shrink-0 md:w-2/5">
