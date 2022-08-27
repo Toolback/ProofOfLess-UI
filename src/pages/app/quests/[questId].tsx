@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import cn from 'classnames';
 import { NextSeo } from 'next-seo';
@@ -14,108 +14,185 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { WalletContext } from '@/lib/hooks/use-connect';
 import { ethers, providers } from 'ethers';
 
-export const getStaticPaths: GetStaticPaths = async() => {
-  let instance = await IPLDiamond();
-  let activeQuest = await instance.getAllActiveQuests();
-  const paths = activeQuest.map((questId:any) => {
-    return {
-      params:{ questId: (Number(questId)).toString()}
-    }
-  })
-  return {
-    paths,
-    fallback:false
-  }
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   let instance = await IPLDiamond();
+//   let activeQuest = await instance.getAllActiveQuests();
+//   const paths = activeQuest.map((questId: any) => {
+//     return {
+//       params: { questId: Number(questId).toString() },
+//     };
+//   });
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// };
 
-}
+// export const getStaticProps: GetStaticProps = async (context:any) => {
+//   const unitQuestId = context.params.questId
+//   const instance = await IPLDiamond();
+//   const req = await instance.getQuestData(unitQuestId)
+//   let isUserInWaitingList = req.waitingListAddress.includes("")
+//   let startPeriod = new Date(Number(req.startPeriod) * 1000).toLocaleDateString("fr-EU")
+//   let endPeriod = new Date(Number(req.endPeriod) * 1000).toLocaleDateString("fr-EU")
 
-export const getStaticProps: GetStaticProps = async (context:any) => {
-  const unitQuestId = context.params.questId
-  const instance = await IPLDiamond();
-  const req = await instance.getQuestData(unitQuestId)
-  let isUserInWaitingList = req.waitingListAddress.includes("")
-  let startPeriod = new Date(Number(req.startPeriod) * 1000).toLocaleDateString("fr-EU")
-  let endPeriod = new Date(Number(req.endPeriod) * 1000).toLocaleDateString("fr-EU")
+//   let unitQuest = {
+//     questName: req.questName,
+//     questSubtitle: req.questSubtitle || null,
+//     questDetails: req.questDetails || null,
+//     questRules : req.questRules || null,
+//     questId: Number(req.questId),
+//     questType: req.questType || null,
+//     author: req.author,
+//     questEntryToken: req.questEntryToken,
+//     questEntryCost: Number(req.questEntryCost),
+//     lessReward: Number(req.lessReward),
+//     fees: Number(req.fees),
+//     startPeriod,
+//     endPeriod,
+//     delayPeriod: Number(req.delayPeriod),
+//     questBalance: Number(req.questBalance),
+//     waitingListAddress: req.waitingListAddress,
+//     participants: req.participants,
+//     isInWaitingList: "false",
+//     isInParticipantsList: "false",
+//     isActive: req.isActive,
+//     actionCall : Number(req.questId)
+// }
 
-  let unitQuest = {
-    questName: req.questName,
-    questSubtitle: req.questSubtitle || null,
-    questDetails: req.questDetails || null,
-    questRules : req.questRules || null,
-    questId: Number(req.questId),
-    questType: req.questType || null,
-    author: req.author,
-    questEntryToken: req.questEntryToken,
-    questEntryCost: Number(req.questEntryCost),
-    lessReward: Number(req.lessReward),
-    fees: Number(req.fees),
-    startPeriod,
-    endPeriod,
-    delayPeriod: Number(req.delayPeriod),
-    questBalance: Number(req.questBalance),
-    waitingListAddress: req.waitingListAddress,
-    participants: req.participants,
-    isInWaitingList: "false",
-    isInParticipantsList: "false",
-    isActive: req.isActive,
-    actionCall : Number(req.questId)
-}
-
-
-  return{
-    props:{quest: unitQuest}}
-}
-const QuestPageDetails: NextPageWithLayout<
-InferGetStaticPropsType<typeof getStaticProps>
-> = (props) => {
+//   return{
+//     props:{quest: unitQuest}}
+// }
+const QuestPageDetails: NextPageWithLayout = () => {
   const { address } = useContext(WalletContext);
-  const [userWaitingListStatus, setUserWaitingListStatus] = useState(false)
-  const [userParticipantStatus, setUserParticipantStatus] = useState(false)
+  const [userWaitingListStatus, setUserWaitingListStatus] = useState(false);
+  const [userParticipantStatus, setUserParticipantStatus] = useState(false);
+  let Q = {
+    questName: "N/A",
+    questSubtitle: "N/A",
+    questDetails: "N/A",
+    questRules: "N/A",
+    questId: null,
+    questType: "N/A",
+    author: "N/A",
+    questEntryToken: "N/A",
+    questEntryCost: "N/A",
+    lessReward: "N/A",
+    fees: "N/A",
+    startPeriod: null,
+    endPeriod: null,
+    delayPeriod: null,
+    questBalance: "N/A",
+    waitingListAddress: [],
+    waitingListAddressLength: "N/A",
+    participants: [],
+    participantsLength: "N/A",
+    isInWaitingList: 'false',
+    isInParticipantsList: 'false',
+    isActive: false,
+    actionCall: null,
+  };
+  const [qData, setQData] = useState<any>({Q});
+  const [reload, setReload] = useState(false);
 
-  let q = props.quest
+  // let q = props.quest
+  // console.log('test context', context);
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("U.E RUNNING")
+      // const unitQuestId = context.params.questId;
+      const instance = await IPLDiamond();
+      const req = await instance.getQuestData(1);
 
-  function isSubscribed () {
-    const req = q.waitingListAddress.includes(address)
-    setUserWaitingListStatus(req);
-    // userWaitingListStatus ? (
-    //   setUserWaitingListStatus(true)
-    // ):(
-    //   setUserWaitingListStatus(false)
-    // )
-    return userWaitingListStatus
-  }
 
-  function isParticipant () {
-    const req = q.participants.includes(address);
-    setUserParticipantStatus(req)
-    return userParticipantStatus  
-  }
+      // let isUserInWaitingList = req.waitingListAddress.includes('');
+      let startPeriod = new Date(
+        Number(req.startPeriod) * 1000
+      ).toLocaleDateString('fr-EU');
+      let endPeriod = new Date(Number(req.endPeriod) * 1000).toLocaleDateString(
+        'fr-EU'
+      );
+
+      let unitQuest = {
+        questName: req.questName,
+        questSubtitle: req.questSubtitle || null,
+        questDetails: req.questDetails || null,
+        questRules: req.questRules || null,
+        questId: Number(req.questId),
+        questType: req.questType || null,
+        author: req.author,
+        questEntryToken: req.questEntryToken,
+        questEntryCost: Number(req.questEntryCost).toString(),
+        lessReward: Number(req.lessReward).toString(),
+        fees: Number(req.fees).toString(),
+        startPeriod,
+        endPeriod,
+        delayPeriod: Number(req.delayPeriod),
+        questBalance: Number(req.questBalance).toString(),
+        waitingListAddress: req.waitingListAddress,
+        waitingListAddressLength: (req.waitingListAddress.length).toString(),
+        participants: req.participants,
+        participantsLength: (req.participants.length).toString(),
+        isInWaitingList: 'false',
+        isInParticipantsList: 'false',
+        isActive: req.isActive,
+        actionCall: Number(req.questId),
+      };
+
+      setQData(unitQuest);
+      // const req2 = await instance.isUserInWaitingList(1, address);
+      // console.log("REQ 2", req2)
+      return {
+        props: { quest: unitQuest },
+      };
+    };
+    const fetchUserStatus = async () => {
+      const instance = await IPLDiamond();
+      if(address) {
+        const req = await instance.isUserInWaitingList(1, address);
+        // req.wait()
+        const req2 = await instance.isUserInQuest(1, address);
+        // req2.wait();
+        console.log("Sub Satuts",address, req)
+        setUserWaitingListStatus(req);
+        setUserParticipantStatus(req2);
+      }
+    }
+    fetchData().then(async (e) => {
+      await fetchUserStatus();
+    });
+  }, [reload]);
 
   const handleSubscribe = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const signer = provider.getSigner(address)
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner(address);
     const instance = await IPLDiamond(signer);
-    const req = await instance.subscribeToWaitingList(q.questId)
-    await req.wait()
-    setUserWaitingListStatus(true);
-
-  }
+    const req = await instance.subscribeToWaitingList(qData.questId);
+    await req.wait();
+    setReload(!reload)
+  };
 
   const handleUnsubscribe = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const signer = provider.getSigner(address)
+    const arr = qData.waitingListAddress;
+    const idx = arr.indexOf(address);
+    console.log('test IDX', idx, arr);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner(address);
     const instance = await IPLDiamond(signer);
-    const req = await instance.unsubscribeFromWaitingList(q.questId, address)
-    await req.wait()
-    setUserWaitingListStatus(false);
-
-  }
+    const req = await instance.unsubscribeFromWaitingList(
+      qData.questId,
+      address,
+      idx
+    );
+    await req.wait();
+    setReload(!reload)
+  };
 
   const renderActionCall = () => {
-    if(address === undefined) {
-      return(
+    if (address === undefined) {
+      return (
         <Button
-        // onClick={() => handleUnsubscribe()}
+          // onClick={() => handleUnsubscribe()}
           size="large"
           shape="rounded"
           fullWidth={true}
@@ -123,11 +200,11 @@ InferGetStaticPropsType<typeof getStaticProps>
         >
           CONNECT
         </Button>
-      )
+      );
     } else if (userWaitingListStatus === true) {
       return (
         <Button
-        onClick={() => handleUnsubscribe()}
+          onClick={() => handleUnsubscribe()}
           size="large"
           shape="rounded"
           fullWidth={true}
@@ -135,11 +212,11 @@ InferGetStaticPropsType<typeof getStaticProps>
         >
           UNSUBSCRIBE
         </Button>
-      )
+      );
     } else {
       return (
         <Button
-        onClick={() => handleSubscribe()}
+          onClick={() => handleSubscribe()}
           size="large"
           shape="rounded"
           fullWidth={true}
@@ -147,9 +224,9 @@ InferGetStaticPropsType<typeof getStaticProps>
         >
           SUBSCRIBE
         </Button>
-      )
+      );
     }
-  }
+  };
 
   return (
     <>
@@ -159,48 +236,77 @@ InferGetStaticPropsType<typeof getStaticProps>
       />
       <QuestDetailsFrame>
         <div className="mb-5 border-b border-dashed border-gray-400 pb-5 dark:border-gray-500 xs:mb-7 xs:pb-6">
-          <h2 className="text-center mb-4 text-3xl text-black dark:text-gray-200">Twitter Quest</h2>
-          <span className='flex justify-center text-gray-400'>Focus on value, not quantity ! </span>
-          <span className="flex mt-4 text-gray-700 dark:text-gray-400">Details</span>
-          <span className="flex mt-2">
-            Tweet less than your 6 month weekly average for 4 consecutive week. Tweet less than your 6 month weekly average for 4 consecutive week. Tweet less than your 6 month weekly average for 4 consecutive week. Tweet less than your 6 month weekly average for 4 consecutive week. Tweet less than your 6 month weekly average for 4 consecutive week. Tweet less than your 6 month weekly average for 4 consecutive week.
+          <h2 className="mb-4 text-center text-3xl text-black dark:text-gray-200">
+            Twitter Quest
+          </h2>
+          <span className="flex justify-center text-gray-400">
+            Focus on value, not quantity !{' '}
+          </span>
+          <span className="mt-4 flex text-gray-700 dark:text-gray-400">
+            Details
+          </span>
+          <span className="mt-2 flex">
+            Tweet less than your 6 month weekly average for 4 consecutive week.
+            Tweet less than your 6 month weekly average for 4 consecutive week.
+            Tweet less than your 6 month weekly average for 4 consecutive week.
+            Tweet less than your 6 month weekly average for 4 consecutive week.
+            Tweet less than your 6 month weekly average for 4 consecutive week.
+            Tweet less than your 6 month weekly average for 4 consecutive week.
           </span>
 
-          <span className="flex mt-4 text-gray-700 dark:text-gray-400">Rule</span>
-          <span className="flex mt-2">
-          Tweet less than your 6 month weekly average for 4 consecutive week.          
+          <span className="mt-4 flex text-gray-700 dark:text-gray-400">
+            Rule
+          </span>
+          <span className="mt-2 flex">
+            Tweet less than your 6 month weekly average for 4 consecutive week.
           </span>
 
-          <span className="flex mt-4 text-gray-700 dark:text-gray-400">Prerequist</span>
-          <span className="flex mt-2">
-          To automatically participate in the next quest, you need to
-          - Supply at least the Entry Cost Amount
-          - Subscribe to the quest you want !        
+          <span className="mt-4 flex text-gray-700 dark:text-gray-400">
+            Prerequist
           </span>
-
+          <span className="mt-2 flex">
+            To automatically participate in the next quest, you need to - Supply
+            at least the Entry Cost Amount - Subscribe to the quest you want !
+          </span>
         </div>
-        <div className="flex flex-col gap-4 xs:gap-[18px] border-b border-dashed border-gray-400 mb-5 pb-5 dark:border-gray-500">
-          <TransactionInfo label={'Delay'} value={`${q.startPeriod} - ${q.endPeriod}`}/>
-          <TransactionInfo label={'Participants'} value={(q.participants.length).toString()} />
-          <TransactionInfo label={'Waiting List'} value={(q.waitingListAddress.length).toString()} />
-          <TransactionInfo label={'Quest Gain'} value={q.questBalance.toString()} />
-          <TransactionInfo label={'Less Reward'} value={q.lessReward.toString()} />
-          <TransactionInfo label={'Protocol Fee'} value={q.fees.toString()} />
-          <TransactionInfo label={'Entry Cost'} value={`${q.questEntryCost} PUsdc`} />
-
+        <div className="mb-5 flex flex-col gap-4 border-b border-dashed border-gray-400 pb-5 dark:border-gray-500 xs:gap-[18px]">
+          <TransactionInfo
+            label={'Delay'}
+            value={`${qData.startPeriod} - ${qData.endPeriod}`}
+          />
+          <TransactionInfo
+            label={'Participants'}
+            value={qData.participantsLength}
+          />
+          <TransactionInfo
+            label={'Waiting List'}
+            value={qData.waitingListAddressLength}
+          />
+          <TransactionInfo
+            label={'Quest Gain'}
+            value={qData.questBalance}
+          />
+          <TransactionInfo
+            label={'Less Reward'}
+            value={qData.lessReward}
+          />
+          <TransactionInfo label={'Protocol Fee'} value={qData.fees} />
+          <TransactionInfo
+            label={'Entry Cost'}
+            value={`${qData.questEntryCost} PUsdc`}
+          />
         </div>
-        <div className='flex justify-around'>
-          <div className='flex flex-col text-center gap-2'>
-          <span>Subscribed</span>
-          <span>{userWaitingListStatus ? ("✅") : ("❌")}</span>
+        <div className="flex justify-around">
+          <div className="flex flex-col gap-2 text-center">
+            <span>Subscribed</span>
+            <span>{userWaitingListStatus ? '✅' : '❌'}</span>
           </div>
-          <div className='flex flex-col text-center gap-2'>
-          <span>Participe</span>
-          <span>{userParticipantStatus ? ("✅") : ("❌")}</span>
+          <div className="flex flex-col gap-2 text-center">
+            <span>Participe</span>
+            <span>{userParticipantStatus ? '✅' : '❌'}</span>
           </div>
         </div>
         {renderActionCall()}
-
       </QuestDetailsFrame>
     </>
   );
