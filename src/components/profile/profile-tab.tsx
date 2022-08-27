@@ -41,14 +41,14 @@ export default function ProfileTab({data}: DonutDetailsProps) {
           title: 'Statistics',
           path: 'statistics',
         },
-        {
-          title: 'Collection',
-          path: 'collection',
-        },
-        {
-          title: 'Quests',
-          path: 'quests',
-        },
+        // { // TODO !
+        //   title: 'Collection',
+        //   path: 'collection',
+        // },
+        // {
+        //   title: 'Quests',
+        //   path: 'quests',
+        // },
       ]}
     >
       <TabPanel className="focus:outline-none">
