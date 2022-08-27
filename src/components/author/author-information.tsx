@@ -78,7 +78,8 @@ export default function AuthorInformation({
 
 
             <div className="text-sm leading-6 tracking-tighter text-gray-600 dark:text-gray-400">
-              {userData.userBio}
+              {userData.userBio === "" ? ("Set Your First Bio!") : (userData.userBio)}
+
             </div>
             <button
               onClick={() => ToggleUserBio()}

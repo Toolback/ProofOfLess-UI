@@ -146,7 +146,7 @@ const AuthorProfilePage: NextPageWithLayout<
               ) : (
                 <div className="flex items-center justify-center md:justify-between">
                   <h2 className="text-xl font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl">
-                    {userData.userName}
+                    {userData.userName === "" ? ("Set Your Username!") : (userData.userName)}
                   </h2>
                   <button
                     onClick={() => setChangeNameActive()}
