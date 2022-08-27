@@ -67,12 +67,15 @@ const DashBoard: NextPageWithLayout=() => {
 
   useEffect(() => {
     const fetchData = async() => {
+      setLoading(true)
       const data = await retrieveAllListedQuests()
       setActiveQuestData(data.activeQuestData)
       setTotalUsers(data.totalUsers)
       return(data)
     }
     fetchData().then( e => console.log('useEffect ended', e))
+    setLoading(false)
+
   }, [userDonutId])
   const renderTwitterParticipants:string = activeQuestData[0]? (activeQuestData[0].participants.toString()) : "N/A" 
   
@@ -128,10 +131,10 @@ const DashBoard: NextPageWithLayout=() => {
 
       <div className="mt-8 flex flex-wrap">
         <div className="w-full mb-4 ltr:lg:pr-6 rtl:lg:pl-6 ">
-          {/* {!isLoading && */}
+          {!isLoading &&
                   <MainQuests_Table activeQuestData={activeQuestData} />
 
-          {/* } */}
+          } 
           </div>
         <div className="mt-4 mb-8 grid w-full grid-cols-1 gap-6 xs:mt-2 sm:mb-10 sm:grid-cols-2 lg:order-1 lg:mb-0 lg:flex lg:w-auto">
           <OverviewChart totalUsers={totalUsers} />
