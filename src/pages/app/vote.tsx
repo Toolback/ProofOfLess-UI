@@ -40,12 +40,13 @@ const VotePage: NextPageWithLayout = () => {
               delegated <br className="hidden xs:inline-block" /> to you.
             </p>
           </motion.div>
+
           <motion.a
             whileTap={{ scale: 0.98 }}
             whileHover={{ scale: 1.015 }}
             target="_blank"
             rel="noopener noreferrer"
-            href="https://discord.com/"
+            href="https://discord.gg/Xe77tVJY"
             className="rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
           >
             <span className="inline-block h-auto w-12 sm:w-auto">
@@ -55,6 +56,7 @@ const VotePage: NextPageWithLayout = () => {
               Chat on Discord
             </h3>
           </motion.a>
+
           <motion.a
             whileTap={{ scale: 0.98 }}
             whileHover={{ scale: 1.015 }}
